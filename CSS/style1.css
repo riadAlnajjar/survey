@@ -1,0 +1,93 @@
+.my-wrap{
+    background-color: rgba(114, 114, 114, 0.21);
+}
+
+/*navbar*/
+
+.navbar {
+    min-height: 70px;
+}
+
+
+.navbar-nav > li > a {
+    font-size: 24px;
+    padding: 17px 0;
+}
+
+
+/*brand*/
+
+.navbar-brand {
+    font: 25px 23px;
+    line-height: 20px;
+    font-size: 35px;
+}
+
+.navbar-brand>span {
+    font-size: 29px;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    font-size: 17px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+/*dropdown men
+
+/* end navbar */
+
+/* about */
+
+.about {
+    padding-top: 115px;
+    min-height: 320px;
+    background: url(../img/about.jpg);
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.about h1{
+    padding-top:25px;
+    color: #1e2225,
+}
+.about .my-wrap{
+        min-height: 550px;
+}
+/* about end*/
+/*reservation*/
+.login {
+    z-index: 1;
+    min-height: 290px;
+    background-color: rgba(52, 51, 51, 0.23);
+    -webkit-border-radius: 2%;
+    border-radius: 6%;
+    margin-top: -8%;
+}
+
+.login-form {
+    padding: 15px;
+}
+
+.login-form .btn-primary {
+    color: #fff;
+    background-color: rgba(1, 111, 157, 0.73);
+    border-color: rgba(1, 111, 157, 0.85);
+}
+
+.login-form .form-control {
+    background-color: rgba(255, 255, 255, 0.77);
+    border: 1px solid rgba(206, 212, 218, 0.8);
+}
+
+.login-form form {
+    width: 100%;
+}
+
+.login-form i {
+    padding-bottom: 15px;
+    color: rgba(245, 245, 245, 0.86);
+}
+
+
+/*end reservation*/

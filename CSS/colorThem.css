@@ -1,0 +1,15 @@
+
+.navbar-dark, .navbar-dark .navbar-toggle:focus, .navbar-dark .navbar-toggle:hover {
+   background: url(../img/about.jpg);
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.navbar-dark .navbar-toggle:focus {
+    border-color: #042c41;
+}
+
+.navbar-brand>span {
+    color: #20434a;
+}
