@@ -1,0 +1,23 @@
+.formG {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    padding: 20px 0;
+    background: url(../../../assets/images/about.jpg);
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-position: center;
+    font-family: Roboto, Helvetica Neue, Arial, sans-serif;
+    font-weight: 400;
+    z-index: 20;
+}
