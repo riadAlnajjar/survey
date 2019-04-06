@@ -1,0 +1,17 @@
+.question-container {
+    background: #fff;
+    border: 1px solid rgb(236, 228, 228);
+    -webkit-box-shadow: -2px 2px 21px 1px rgba(181, 179, 181, 0.72);
+    -moz-box-shadow: -2px 2px 21px 1px rgba(181, 179, 181, 0.72);
+    box-shadow: -2px 2px 21px 1px rgba(181, 179, 181, 0.72);
+    margin-bottom: 15px;
+    margin-top: 30px;
+    margin-right: 70px;
+    margin-left: 131px;
+}
+
+@media (min-width: 768px) {
+    .question-container .container {
+        width: 80%
+    }
+}

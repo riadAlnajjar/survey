@@ -1,0 +1,10 @@
+.Questions {}
+
+.required .md-form.md-outline input[type=text]:focus:not([readonly]), .required .md-form.md-outline input[type=text] {
+    border-color: #ac3333;
+    box-shadow: inset 0px 0px 0px 1px #ac3333;
+}
+
+.required .md-form.md-outline input[type=text]:focus:not([readonly])+label {
+    color: #ac3333;
+}

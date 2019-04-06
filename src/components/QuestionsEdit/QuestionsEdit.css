@@ -1,0 +1,47 @@
+.sticky-container {
+    position: fixed;
+    top: 17%;
+    margin: 7px;
+    background-color: #e0dbdb96;
+    box-shadow: 1px 1px 9px 2px #b9abab;
+    padding: 10px;
+}
+
+.sticky-container .btn-floating {
+    -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15);
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15);
+    width: 47px;
+    height: 47px;
+    position: relative;
+    z-index: 1;
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    /* transition: all .2s ease-in-out; */
+    margin: 10px;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+}
+
+.sticky-container .btn-floating i {
+    font-size: 1.25rem;
+    line-height: 68px;
+}
+
+.sticky-container .btn-floating.btn {
+    width: 70.1px;
+    height: 70.1px;
+}
+
+.sticky-container .modal-body {
+    font-size: 25px;
+    font-weight: 400;
+}
+
+.sticky-container .option-button {
+    margin: 15px auto;
+}

@@ -1,5 +1,6 @@
 .my-card {
-    z-index: 100;
+    z-index: 101;
+    margin-top: 6rem !important;
 }
 
 .form-header {
@@ -19,15 +20,19 @@
     background-image: linear-gradient(60deg, #842F3C -15%, #143248 100%);
 }
 
-.md-form .prefix.active, .md-form input[type=email]:focus:not([readonly])+label, .md-form input[type=password]:focus:not([readonly])+label, .md-form input[type=text]:focus:not([readonly])+label {
+.my-card .md-form .prefix.active, .my-card .md-form input[type=email]:focus:not([readonly])+label, .my-card .md-form input[type=password]:focus:not([readonly])+label, .my-card .md-form input[type=text]:focus:not([readonly])+label {
     color: #842F3C;
 }
 
-.md-form input[type=password]:focus:not([readonly]), .md-form input[type=email]:focus:not([readonly]):focus:not([readonly]), .md-form input[type=text]:focus:not([readonly]) {
+.my-card .md-form input[type=password]:focus:not([readonly]),.my-card .md-form input[type=email]:focus:not([readonly]):focus:not([readonly]),.my-card .md-form input[type=text]:focus:not([readonly]) {
     box-shadow: 0 1px 0 0 #842F3C;
     border-bottom: 1px solid #842F3C;
 }
 
-.btn-light-blue {
+.my-card .btn-light-blue {
     background-color: #143248 !important;
+}
+
+.my-card .btn-light-blue:not([disabled]):not(.disabled):active {
+    background-color: #9ED0D1 !important;
 }

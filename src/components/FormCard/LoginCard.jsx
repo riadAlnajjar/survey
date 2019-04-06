@@ -12,7 +12,6 @@ import {
   MDBBtn,
   MDBInput
 } from "mdbreact";
-
 const FormCard = props => {
   let input;
   if (props.login) {
@@ -80,7 +79,7 @@ const FormCard = props => {
   return (
     <MDBContainer className="mt-5 my-card">
       <MDBRow center>
-        <MDBCol md="4">
+        <MDBCol lg="4" md="6">
           <MDBCard>
             <MDBCardBody>
               <MDBCardHeader className="form-header deep-blue-gradient rounded">
@@ -101,8 +100,10 @@ const FormCard = props => {
               {props.login ? (
                 <MDBModalFooter>
                   <div className="font-weight-light text-center">
-                    <p>Not a member? Sign Up</p>
-                    <p>Forgot Password?</p>
+                    <p>
+                      Not a member? <a href="/SignUp">Sign Up</a>
+                    </p>
+                    {/* <p>Forgot Password?</p> */}
                   </div>
                 </MDBModalFooter>
               ) : null}

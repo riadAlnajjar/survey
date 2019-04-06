@@ -20,4 +20,5 @@
     font-family: Roboto, Helvetica Neue, Arial, sans-serif;
     font-weight: 400;
     z-index: 20;
+    overflow-y: scroll;
 }
