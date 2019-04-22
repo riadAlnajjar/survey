@@ -1,10 +1,20 @@
 import React, { Component } from "react";
-import { MDBInput } from "mdbreact";
+import { MDBInput, MDBCard, MDBCardBody } from "mdbreact";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "./Question.css";
+// import Fileinput from "../fileInput/fileinput";
 
 class Question extends Component {
   state = {
-    answer: ""
+    answer: "",
+    startDate: new Date()
+  };
+  dateHandleChange = date => {
+    this.setState({
+      startDate: date
+    });
+    this.props.textOnChangeHandler(date, this.props.index);
   };
   render() {
     console.log(this.props);
@@ -38,8 +48,16 @@ class Question extends Component {
                 : "required mt-4 mb-4"
             }
           >
-            <select className="browser-default custom-select">
-              <option disabled selected value={this.props.questions.question}>
+            <select
+              onChange={e => {
+                const answer = e.currentTarget.value;
+                this.setState({ answer });
+                this.props.textOnChangeHandler(answer, this.props.index);
+              }}
+              className="browser-default custom-select"
+              defaultValue={this.props.questions.question}
+            >
+              <option disabled value={this.props.questions.question}>
                 {this.props.questions.question}
               </option>
               {this.props.questions.choices.map((elm, index) => {
@@ -53,10 +71,35 @@ class Question extends Component {
           </div>
         );
         break;
+      case "DatePicker":
+        question = (
+          <div className="datePicker">
+            <h4 className="datePickerLabel">{this.props.questions.question}</h4>
+            <DatePicker
+              className={
+                "datePickerQ" + this.props.questions.validation.valid
+                  ? ""
+                  : "red-border"
+              }
+              selected={this.state.startDate}
+              onChange={this.dateHandleChange}
+            />
+          </div>
+        );
+        break;
       default:
         question = null;
     }
-    return question;
+    return (
+      <MDBCard
+        onClick={e => {
+          this.props.setEditindex(this.props.index);
+        }}
+        className="question-card"
+      >
+        <MDBCardBody className="question">{question}</MDBCardBody>
+      </MDBCard>
+    );
   }
 }
 export default Question;

@@ -9,7 +9,8 @@ import {
   MDBInput,
   MDBContainer,
   MDBCol,
-  MDBRow
+  MDBRow,
+  MDBFormInline
 } from "mdbreact";
 import "./QuestionsEdit.css";
 
@@ -27,12 +28,30 @@ class Edit extends Component {
         valid: true
       }
     },
-    choice: ""
+    choice: "",
+    editmode: false
   };
 
   toggle = () => {
     const modal = !this.state.modal;
     this.setState({ modal });
+    if (this.state.question.question.trim() !== "") {
+      const question = {
+        type: "text",
+        question: "",
+        answer: "",
+        choices: [],
+        marks: [],
+        validation: {
+          required: false,
+          valid: true
+        }
+      };
+      this.setState({ question });
+    }
+    if (this.state.editmode) {
+      this.setState({ editmode: false });
+    }
   };
   addHandler = () => {
     if (this.state.question.question.trim() !== "") {
@@ -113,17 +132,68 @@ class Edit extends Component {
         </div>
       );
     }
+    let editButtons = null;
+    if (!this.props.made) {
+      editButtons = (
+        <React.Fragment>
+          <MDBRow>
+            <MDBBtn
+              onClick={e => {}}
+              floating
+              color="peach-gradient"
+              className="btn-floating peach-gradient "
+            >
+              <MDBIcon icon="fill-drip" size="3x" />
+            </MDBBtn>
+          </MDBRow>
+          <MDBRow>
+            <MDBBtn
+              onClick={this.toggle}
+              floating
+              color="primary"
+              className="btn-floating "
+            >
+              <MDBIcon icon="plus" size="4x" />
+            </MDBBtn>
+          </MDBRow>
+          <MDBRow>
+            <MDBBtn
+              onClick={e => {
+                const question = this.props.editHandler();
+                if (question) {
+                  console.log(question);
+                  this.setState({
+                    question: question
+                  });
+                  this.toggle();
+                  this.setState({ editmode: true });
+                }
+              }}
+              floating
+              color="unique-color"
+              className="btn-floating unique-color"
+            >
+              <MDBIcon icon="edit" size="3x" />
+            </MDBBtn>
+          </MDBRow>
+          <MDBRow>
+            <MDBBtn
+              onClick={this.props.remove}
+              floating
+              color="danger-color-dark"
+              className="btn-floating danger-color-dark"
+            >
+              <MDBIcon icon="trash-alt" size="3x" />
+            </MDBBtn>
+          </MDBRow>
+        </React.Fragment>
+      );
+    }
+
     return (
-      <div className="sticky-container">
+      <div className={this.props.made ? null : "sticky-container"}>
         <div>
-          <MDBBtn
-            onClick={this.toggle}
-            floating
-            color="primary"
-            className="btn-floating "
-          >
-            <MDBIcon icon="plus" size="4x" />
-          </MDBBtn>
+          {editButtons}
           <MDBModal isOpen={this.state.modal} toggle={this.toggle} centered>
             <MDBModalHeader toggle={this.toggle}>question edit</MDBModalHeader>
             <MDBModalBody>
@@ -137,11 +207,12 @@ class Edit extends Component {
                   }}
                   className="browser-default custom-select"
                 >
-                  <option disabled selected>
+                  <option disabled defaultValue>
                     question Type
                   </option>
                   <option value="text">text</option>
                   <option value="select">select</option>
+                  <option value="DatePicker">Date Picker</option>
                 </select>
               </div>
               {selectChoices}
@@ -156,12 +227,45 @@ class Edit extends Component {
                 size="lg"
                 label="question"
               />
+              <MDBFormInline>
+                <MDBInput
+                  label="required"
+                  type="checkbox"
+                  checked={this.state.question.validation.required}
+                  id="checkbox1"
+                  onChange={e => {
+                    const question = { ...this.state.question };
+                    question.validation.required = !this.state.question
+                      .validation.required;
+                    this.setState({ question: question });
+                  }}
+                />
+              </MDBFormInline>
             </MDBModalBody>
             <MDBModalFooter>
-              <MDBBtn color="secondary" onClick={this.toggle}>
+              <MDBBtn
+                color="secondary"
+                onClick={() => {
+                  this.toggle();
+                  if (this.state.editmode) {
+                    this.setState({ editmode: false });
+                  }
+                }}
+              >
                 Close
               </MDBBtn>
-              <MDBBtn color="primary" onClick={this.addHandler}>
+              <MDBBtn
+                color="primary"
+                onClick={() => {
+                  if (!this.state.editmode) {
+                    this.addHandler();
+                  } else {
+                    this.props.addEditHandler(this.state.question);
+                    this.toggle();
+                    this.setState({ editmode: false });
+                  }
+                }}
+              >
                 Save changes
               </MDBBtn>
             </MDBModalFooter>

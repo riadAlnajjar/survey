@@ -4,6 +4,9 @@ import { MDBContainer, MDBCol, MDBRow, MDBBtn } from "mdbreact";
 import "./questionsContainer.css";
 
 class QuestionsContainer extends Component {
+  componentDidMount() {
+    console.log("\n", this.props, "\n");
+  }
   render() {
     const questions = this.props.questions
       ? this.props.questions.map((elm, i) => {
@@ -14,6 +17,7 @@ class QuestionsContainer extends Component {
               key={i}
               questions={{ ...elm }}
               validat={this.props.validat}
+              setEditindex={this.props.setEditindex}
             />
           );
         })

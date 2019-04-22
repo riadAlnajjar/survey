@@ -1,0 +1,9 @@
+.formColor {
+    background-color: #37474f;
+    width: 100%;
+    height: 12px;
+}
+
+.formBtn {
+    padding: 0.84rem 1.5rem;
+}

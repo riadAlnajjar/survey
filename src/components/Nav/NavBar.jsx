@@ -1,15 +1,13 @@
 import React from "react";
-// import { Switch } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   MDBNavbar,
   MDBNavbarBrand,
   MDBNavbarNav,
-  // MDBNavItem,
-  // MDBNavLink,
+  MDBNavItem,
   MDBNavbarToggler,
   MDBCollapse,
   MDBContainer
-  // MDBFormInline
 } from "mdbreact";
 import "./NavBar.css";
 class NavBar extends React.Component {
@@ -32,10 +30,10 @@ class NavBar extends React.Component {
     return (
       <div id="classicformpage">
         <div>
-          <MDBNavbar dark expand="md" fixed="top">
+          <MDBNavbar className="flexible-navbar" light expand="md" scrolling>
             <MDBContainer>
               <MDBNavbarBrand>
-                <strong className="white-text">Survey lab</strong>
+                <strong style={this.props.colorStyle}>Survey lab</strong>
               </MDBNavbarBrand>
               <MDBNavbarToggler
                 onClick={this.toggleCollapse("navbarCollapse")}
@@ -45,7 +43,19 @@ class NavBar extends React.Component {
                 isOpen={this.state.collapseID}
                 navbar
               >
-                <MDBNavbarNav left />
+                {this.props.linkDisplay ? (
+                  <MDBNavbarNav left>
+                    <MDBNavItem active>
+                      <NavLink
+                        style={this.props.colorStyle}
+                        to="/SurveyLab"
+                        exact
+                      >
+                        laboratory
+                      </NavLink>
+                    </MDBNavItem>
+                  </MDBNavbarNav>
+                ) : null}
               </MDBCollapse>
             </MDBContainer>
           </MDBNavbar>

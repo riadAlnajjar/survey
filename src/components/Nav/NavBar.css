@@ -16,14 +16,25 @@
     font-weight: 300;
 }
 
-.NavItem {
+.nav-item {
     display: list-item;
     text-align: -webkit-match-parent;
     list-style: none;
+    margin-left: 4rem;
 }
 
-.NavItem a:active {
-    background-color: rgba(255, 255, 255, .1);
+.nav-item a {
     color: #fff;
     cursor: pointer;
+    padding: 11px;
+    font-size: 22px;
+}
+
+.nav-item.active a {
+    background-color: rgba(255, 255, 255, .1);
+}
+
+.nav-item a:hover {
+    background-color: #7034462a;
+    color: rgb(231, 222, 222)
 }

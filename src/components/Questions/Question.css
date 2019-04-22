@@ -1,6 +1,4 @@
-.Questions {}
-
-.required .md-form.md-outline input[type=text]:focus:not([readonly]), .required .md-form.md-outline input[type=text] {
+.required .md-form.md-outline input[type=text]:focus:not([readonly]), .required .md-form.md-outline input[type=text], .required .custom-select {
     border-color: #ac3333;
     box-shadow: inset 0px 0px 0px 1px #ac3333;
 }
@@ -8,3 +6,17 @@
 .required .md-form.md-outline input[type=text]:focus:not([readonly])+label {
     color: #ac3333;
 }
+
+.question-card {
+    margin-top: 10px;
+}
+
+.question-card .datePicker {}
+
+.question-card .datePickerLabel {
+    float: left;
+    padding-right: 11px;
+    padding-left: 11px;
+}
+
+.question-card .datePickerQ {}
