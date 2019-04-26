@@ -1,31 +1,24 @@
 {
-  "name": "boot",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "axios": "^0.18.0",
-    "material-ui-pickers": "^2.2.4",
-    "mdbreact": "^4.11.1",
-    "react": "^16.8.5",
-    "react-datepicker": "^2.4.0",
-    "react-dom": "^16.8.5",
-    "react-router": "^5.0.0",
-    "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8"
-  },
+  "name": "react-express-app",
+  "version": "1.0.0",
+  "description": "fun simple",
+  "main": "app.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "concurrently \"nodemon app\" \"cd client && npm start\""
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "author": "L M B R D",
+  "license": "ISC",
+  "dependencies": {
+    "@vitalets/google-translate-api": "^2.8.0",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.4",
+    "express-validator": "^5.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "configurator": "*"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.11"
+  }
 }
