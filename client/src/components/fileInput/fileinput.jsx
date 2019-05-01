@@ -10,7 +10,7 @@ class Fileinput extends Component {
     const selectedFile = e.target.files[0];
     console.log(selectedFile);
     this.setState({
-      selectedFile: selectedFile,
+      selectedFile: e.target.files[0],
       value: e.target.files[0].name
     });
     console.log("selectedFile : ", this.state.selectedFile);

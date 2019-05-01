@@ -14,6 +14,8 @@ class QuestionsContainer extends Component {
             <Question
               index={i}
               textOnChangeHandler={this.props.textOnChangeHandler}
+              checkOnChangeHandler={this.props.checkOnChangeHandler}
+              radioOnClickHandler={this.props.radioOnClickHandler}
               key={i}
               questions={{ ...elm }}
               validat={this.props.validat}

@@ -57,6 +57,17 @@ class SurveyBuilder extends Component {
     this.setState({ questions });
     console.log(this.state);
   };
+  checkOnChangeHandler = (Qindex, Cindex) => {
+    const questions = [...this.state.questions];
+    if (questions[Qindex].type === "checkbox") {
+      questions[Qindex].choices[Cindex].checked = !questions[Qindex].choices[
+        Cindex
+      ].checked;
+    }
+
+    this.setState({ questions });
+  };
+
   checkValidity = (value, rules) => {
     let isValid = true;
     if (rules.required) {
@@ -132,6 +143,7 @@ class SurveyBuilder extends Component {
     let questionContant = (
       <QuestionsContainer
         textOnChangeHandler={this.textOnChangeHandler}
+        checkOnChangeHandler={this.checkOnChangeHandler}
         questions={this.state.questions}
         submit={this.submitHandler}
         validat={this.state.validat}

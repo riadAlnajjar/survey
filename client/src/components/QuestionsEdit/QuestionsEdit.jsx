@@ -25,16 +25,15 @@ class Edit extends Component {
       marks: [],
       validation: {
         required: false,
-        valid: true
+        valid: true,
+        maxlingth: null,
+        minlingth: null
       }
     },
     choice: "",
     editmode: false
   };
-
-  toggle = () => {
-    const modal = !this.state.modal;
-    this.setState({ modal });
+  clearState = () => {
     if (this.state.question.question.trim() !== "") {
       const question = {
         type: "text",
@@ -44,11 +43,18 @@ class Edit extends Component {
         marks: [],
         validation: {
           required: false,
-          valid: true
+          valid: true,
+          maxlingth: null,
+          minlingth: null
         }
       };
       this.setState({ question });
     }
+  };
+  toggle = () => {
+    const modal = !this.state.modal;
+    this.setState({ modal });
+    this.clearState();
     if (this.state.editmode) {
       this.setState({ editmode: false });
     }
@@ -64,9 +70,19 @@ class Edit extends Component {
     const choice = this.state.choice;
     if (choice.trim() !== "") {
       this.removeChoice();
-      question.choices.push(choice);
-      this.setState({ question });
-      console.log(this.state);
+      if (
+        this.state.question.type === "select" ||
+        this.state.question.type === "radiobuttons"
+      ) {
+        question.choices.push(choice);
+        this.setState({ question });
+        console.log(this.state);
+      } else if (this.state.question.type === "checkbox") {
+        const newchoices = { label: choice, checked: false };
+        question.choices.push(newchoices);
+        this.setState({ question });
+        console.log(this.state);
+      }
     }
   };
   removeChoice = () => {
@@ -81,13 +97,24 @@ class Edit extends Component {
   render() {
     let selectChoices = null;
     let addedChoices = null;
-    if (this.state.question.type === "select") {
+    if (
+      this.state.question.type === "select" ||
+      this.state.question.type === "checkbox" ||
+      this.state.question.type === "radiobuttons"
+    ) {
       if (this.state.question.choices !== []) {
         addedChoices = this.state.question.choices.map((choice, index) => {
           return (
             <MDBRow key={index}>
               <MDBCol>
-                <MDBInput label={choice} disabled />
+                <MDBInput
+                  label={
+                    this.state.question.type === "checkbox"
+                      ? choice.label
+                      : choice
+                  }
+                  disabled
+                />
               </MDBCol>
               <MDBCol>
                 <MDBBtn
@@ -203,16 +230,22 @@ class Edit extends Component {
                     const newValue = e.currentTarget.value;
                     const question = { ...this.state.question };
                     question.type = newValue;
+                    question.choices = [];
                     this.setState({ question });
                   }}
                   className="browser-default custom-select"
                 >
-                  <option disabled defaultValue>
+                  <option disabled defaultValue="question Type">
                     question Type
                   </option>
                   <option value="text">text</option>
                   <option value="select">select</option>
+                  <option value="checkbox">CheckBox</option>
+                  <option value="radiobuttons">Radio</option>
+                  <option value="DateTimePicker">Date & Time Picker</option>
                   <option value="DatePicker">Date Picker</option>
+                  <option value="TimePicker">Time Picker</option>
+                  <option value="Slider">Slider</option>
                 </select>
               </div>
               {selectChoices}

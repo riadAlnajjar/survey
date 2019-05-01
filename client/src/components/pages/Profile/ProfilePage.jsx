@@ -28,8 +28,8 @@ class ProfilePage extends Component {
       .post("/forms/(survay id)", { user: "admin@admin.com" })
       .then(res => {
         console.log(res);
-        // const forms = [...res.data.data];
-        // this.setState({ forms: forms });
+        const forms = [...res.data.data];
+        this.setState({ forms: forms });
       })
       .catch(error => {
         console.log(error);
