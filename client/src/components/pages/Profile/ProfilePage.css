@@ -5,3 +5,14 @@
 .profilePage .form-add {
     margin: 20%;
 }
+
+.profilePage .rs-uploader-picture {
+    margin:  auto;
+    width: 90%;
+    height: 250px;
+}
+
+.profilePage .rs-uploader-picture .rs-uploader-trigger, .profilePage .rs-uploader-picture .rs-uploader-trigger-btn {
+    width: 100%;
+    height: 100%;
+}

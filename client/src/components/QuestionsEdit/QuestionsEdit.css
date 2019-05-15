@@ -111,3 +111,25 @@
 .form-inline .form-check-input {
     display: none;
 }
+
+.sticky-container .popover {
+    position: absolute;
+    z-index: 2;
+    top: 106px;
+}
+
+.sticky-container .cover {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+
+.sticky-container .lingth .md-form, .sticky-container .lingth .md-form.form-sm label {
+    padding: 0px 10px;
+}
+
+.required {
+    border: 3px solid #e60808;
+}

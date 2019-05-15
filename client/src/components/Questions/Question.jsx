@@ -7,23 +7,23 @@ import {
   MDBRow,
   MDBContainer
 } from "mdbreact";
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
+import { InputNumber } from "rsuite";
+import StarRatings from "react-star-ratings";
+import { ChromePicker } from "react-color";
 import {
   MuiPickersUtilsProvider,
   DateTimePicker,
   TimePicker,
   DatePicker
 } from "material-ui-pickers";
+
 import DateFnsUtils from "@date-io/date-fns";
 import "./Question.css";
-import Fileinput from "../fileInput/fileinput";
-
-// import Fileinput from "../fileInput/fileinput";
 
 class Question extends Component {
   state = {
-    startDate: new Date("2019-06-18T21:11:54")
+    startDate: new Date("2019-06-18T21:11:54"),
+    answer: 0
   };
   dateHandleChange = date => {
     this.setState({
@@ -31,15 +31,14 @@ class Question extends Component {
     });
     this.props.textOnChangeHandler(date, this.props.index);
   };
+
   render() {
     console.log(this.props);
     let question = null;
     switch (this.props.questions.type) {
       case "text":
         question = (
-          <div
-            className={this.props.questions.validation.valid ? "" : "required"}
-          >
+          <div>
             <MDBInput
               outline
               value={this.props.questions.awnser}
@@ -55,15 +54,31 @@ class Question extends Component {
           </div>
         );
         break;
+      case "number":
+        question = (
+          <div>
+            <MDBRow>
+              <h4 className="datePickerLabel">
+                {this.props.questions.question}
+              </h4>
+            </MDBRow>
+            <MDBRow>
+              <InputNumber
+                value={this.props.questions.awnser}
+                size="lg"
+                onChange={e => {
+                  this.props.textOnChangeHandler(e, this.props.index);
+                }}
+                max={this.props.questions.validation.maxlingth}
+                min={this.props.questions.validation.minlingth}
+              />
+            </MDBRow>
+          </div>
+        );
+        break;
       case "select":
         question = (
-          <div
-            className={
-              this.props.questions.validation.valid
-                ? "mt-4 mb-4"
-                : "required mt-4 mb-4"
-            }
-          >
+          <div className="mt-4 mb-4">
             <select
               onChange={e => {
                 this.props.textOnChangeHandler(
@@ -169,6 +184,49 @@ class Question extends Component {
           </div>
         );
         break;
+      case "StarRating":
+        question = (
+          <div>
+            <MDBRow>
+              <h4 className="datePickerLabel">
+                {this.props.questions.question}
+              </h4>
+            </MDBRow>
+            <MDBRow>
+              <StarRatings
+                rating={this.state.ratings}
+                starRatedColor={"#4285F4"}
+                changeRating={(newRating, name) => {
+                  this.setState({ answer: newRating });
+                  this.props.textOnChangeHandler(newRating, this.props.index);
+                }}
+                numberOfStars={5}
+                name={"rating" + this.props.index}
+              />
+            </MDBRow>
+          </div>
+        );
+        break;
+      case "ColorPicker":
+        question = (
+          <div>
+            <MDBRow>
+              <h4 className="datePickerLabel">
+                {this.props.questions.question}
+              </h4>
+            </MDBRow>
+            <MDBRow>
+              <ChromePicker
+                color={this.state.answer}
+                onChange={e => {
+                  this.setState({ answer: e.hex });
+                  this.props.textOnChangeHandler(e.hex, this.props.index);
+                }}
+              />
+            </MDBRow>
+          </div>
+        );
+        break;
       case "DateTimePicker":
         question = (
           <div className="datePicker">
@@ -210,6 +268,7 @@ class Question extends Component {
           </div>
         );
         break;
+
       case "DatePicker":
         question = (
           <div className="datePicker">
@@ -230,6 +289,7 @@ class Question extends Component {
           </div>
         );
         break;
+
       default:
         question = null;
     }
@@ -238,7 +298,11 @@ class Question extends Component {
         onClick={e => {
           this.props.setEditindex(this.props.index);
         }}
-        className="question-card"
+        className={
+          this.props.questions.validation.valid
+            ? "question-card"
+            : "required question-card"
+        }
       >
         <MDBCardBody className="question">{question}</MDBCardBody>
       </MDBCard>

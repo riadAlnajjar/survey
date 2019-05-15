@@ -4,6 +4,9 @@ import { MDBContainer, MDBCol, MDBRow, MDBBtn } from "mdbreact";
 import "./questionsContainer.css";
 
 class QuestionsContainer extends Component {
+  state = {
+    loading: false
+  };
   componentDidMount() {
     console.log("\n", this.props, "\n");
   }
@@ -24,21 +27,32 @@ class QuestionsContainer extends Component {
           );
         })
       : null;
-    return (
-      <div className="">
-        <MDBContainer className="question-container">
-          <MDBCol>{questions}</MDBCol>
-        </MDBContainer>
-        <MDBRow>
+    let submit;
+    this.state.loading
+      ? (submit = (
+          <div class="spinner-border text-primary m-auto" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        ))
+      : (submit = (
           <MDBBtn
             className="m-auto"
-            onClick={this.props.submit}
+            onClick={e => {
+              this.props.submit(e);
+              this.setState({ loading: true });
+            }}
             color="primary"
             type="submit"
           >
             Submit Form
           </MDBBtn>
-        </MDBRow>
+        ));
+    return (
+      <div className="">
+        <MDBContainer className="question-container">
+          <MDBCol>{questions}</MDBCol>
+        </MDBContainer>
+        <MDBRow>{submit}</MDBRow>
       </div>
     );
   }

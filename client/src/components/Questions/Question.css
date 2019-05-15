@@ -1,14 +1,18 @@
-.required .md-form.md-outline input[type=text]:focus:not([readonly]), .required .md-form.md-outline input[type=text], .required .custom-select {
+/* .required .md-form.md-outline input[type=text]:focus:not([readonly]), .required .md-form.md-outline input[type=text], .required .custom-select {
     border-color: #ac3333;
     box-shadow: inset 0px 0px 0px 1px #ac3333;
-}
+} */
 
-.required .md-form.md-outline input[type=text]:focus:not([readonly])+label {
+/* .required .md-form.md-outline input[type=text]:focus:not([readonly])+label {
     color: #ac3333;
-}
+} */
 
 .question-card {
     margin-top: 10px;
+}
+
+.question-card.required {
+    border: 3px solid #e60808;
 }
 
 .question-card .datePickerLabel {
@@ -85,4 +89,16 @@
     margin-left: -1px;
     margin-top: 8px;
     font-size: 10px;
+}
+
+.fade {
+    opacity: 1;
+}
+
+.rs-input-group .rs-input {
+    position: relative;
+    z-index: 0;
+    float: left;
+    width: 100%;
+    margin-bottom: 0;
 }

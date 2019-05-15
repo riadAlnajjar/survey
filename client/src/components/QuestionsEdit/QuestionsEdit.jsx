@@ -13,6 +13,7 @@ import {
   MDBFormInline
 } from "mdbreact";
 import "./QuestionsEdit.css";
+import { BlockPicker } from "react-color";
 
 class Edit extends Component {
   state = {
@@ -21,17 +22,21 @@ class Edit extends Component {
       type: "text",
       question: "",
       answer: "",
+      rightanswer: "",
       choices: [],
       marks: [],
       validation: {
         required: false,
         valid: true,
-        maxlingth: null,
-        minlingth: null
+        maxlingth: 10000,
+        minlingth: -10000
       }
     },
     choice: "",
-    editmode: false
+    editmode: false,
+    displayColorPicker: false,
+    color: "#ff3533",
+    maxerror: false
   };
   clearState = () => {
     if (this.state.question.question.trim() !== "") {
@@ -44,8 +49,8 @@ class Edit extends Component {
         validation: {
           required: false,
           valid: true,
-          maxlingth: null,
-          minlingth: null
+          maxlingth: 10000,
+          minlingth: -10000
         }
       };
       this.setState({ question });
@@ -165,13 +170,46 @@ class Edit extends Component {
         <React.Fragment>
           <MDBRow>
             <MDBBtn
-              onClick={e => {}}
+              onClick={e => {
+                this.setState({
+                  displayColorPicker: !this.state.displayColorPicker
+                });
+              }}
               floating
               color="peach-gradient"
               className="btn-floating peach-gradient "
             >
               <MDBIcon icon="fill-drip" size="3x" />
             </MDBBtn>
+            {this.state.displayColorPicker ? (
+              <div className="popover">
+                <div
+                  className="cover"
+                  onClick={e => {
+                    this.setState({ displayColorPicker: false });
+                  }}
+                />
+                <BlockPicker
+                  triangle="hide"
+                  color={this.state.color}
+                  onChange={e => {
+                    this.setState({ color: e.rgb });
+                    this.props.themChangehandler(e);
+                  }}
+                  colors={[
+                    "#63B5F7",
+                    "#1c2a48",
+                    "#212121",
+                    "#6d4c41",
+                    "#1b5e20",
+                    "#006064",
+                    "#00796b",
+                    "#1e88e5",
+                    "#1C2331"
+                  ]}
+                />
+              </div>
+            ) : null}
           </MDBRow>
           <MDBRow>
             <MDBBtn
@@ -221,6 +259,7 @@ class Edit extends Component {
       <div className={this.props.made ? null : "sticky-container"}>
         <div>
           {editButtons}
+
           <MDBModal isOpen={this.state.modal} toggle={this.toggle} centered>
             <MDBModalHeader toggle={this.toggle}>question edit</MDBModalHeader>
             <MDBModalBody>
@@ -239,6 +278,7 @@ class Edit extends Component {
                     question Type
                   </option>
                   <option value="text">text</option>
+                  <option value="number">Number</option>
                   <option value="select">select</option>
                   <option value="checkbox">CheckBox</option>
                   <option value="radiobuttons">Radio</option>
@@ -246,6 +286,8 @@ class Edit extends Component {
                   <option value="DatePicker">Date Picker</option>
                   <option value="TimePicker">Time Picker</option>
                   <option value="Slider">Slider</option>
+                  <option value="StarRating">Star Rating</option>
+                  <option value="ColorPicker">Color Picker </option>
                 </select>
               </div>
               {selectChoices}
@@ -260,6 +302,45 @@ class Edit extends Component {
                 size="lg"
                 label="question"
               />
+              {this.state.question.type === "text" ||
+              this.state.question.type === "number" ? (
+                <div className={this.state.maxerror ? "required" : ""}>
+                  <MDBFormInline className=" lingth">
+                    <MDBInput
+                      label="max"
+                      type="number"
+                      value={
+                        this.state.question.validation.maxlingth === 10000
+                          ? ""
+                          : this.state.question.validation.maxlingth
+                      }
+                      onChange={e => {
+                        const newValue = e.currentTarget.value;
+                        const question = { ...this.state.question };
+                        question.validation.maxlingth = newValue;
+                        this.setState({ question });
+                      }}
+                      size="sm"
+                    />
+                    <MDBInput
+                      label="min"
+                      type="number"
+                      value={
+                        this.state.question.validation.minlingth === -10000
+                          ? ""
+                          : this.state.question.validation.minlingth
+                      }
+                      onChange={e => {
+                        const newValue = e.currentTarget.value;
+                        const question = { ...this.state.question };
+                        question.validation.minlingth = newValue;
+                        this.setState({ question });
+                      }}
+                      size="sm"
+                    />
+                  </MDBFormInline>
+                </div>
+              ) : null}
               <MDBFormInline>
                 <MDBInput
                   label="required"
@@ -290,12 +371,26 @@ class Edit extends Component {
               <MDBBtn
                 color="primary"
                 onClick={() => {
-                  if (!this.state.editmode) {
-                    this.addHandler();
-                  } else {
-                    this.props.addEditHandler(this.state.question);
-                    this.toggle();
-                    this.setState({ editmode: false });
+                  if (
+                    this.state.question.validation.maxlingth <
+                    this.state.question.validation.minlingth
+                  ) {
+                    this.setState({ maxerror: true });
+                  }
+
+                  if (
+                    this.state.question.validation.maxlingth >
+                    this.state.question.validation.minlingth
+                  ) {
+                    if (!this.state.editmode) {
+                      this.addHandler();
+                    } else {
+                      this.props.addEditHandler(this.state.question);
+
+                      this.toggle();
+                      this.setState({ editmode: false });
+                      this.setState({ maxerror: true });
+                    }
                   }
                 }}
               >

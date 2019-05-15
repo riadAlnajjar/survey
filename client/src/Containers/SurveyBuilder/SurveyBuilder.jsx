@@ -2,48 +2,59 @@ import React, { Component } from "react";
 import QuestionsContainer from "../questionsContainer/questionsContainer";
 import Edit from "../../components/QuestionsEdit/QuestionsEdit";
 import "./SurveyBuilder.css";
-
+import { MDBInput, MDBFormInline, MDBIcon, MDBBtn } from "mdbreact";
 import axiosQ from "../../axios/axios-question";
+import { Redirect } from "react-router-dom";
 
 class SurveyBuilder extends Component {
   state = {
     form: {
-      title: "",
-      them: "#ff3533"
-    },
-    questions: [
-      {
-        type: "text",
-        question: "ccc",
-        answer: "",
-        choices: [],
-        marks: [],
-        validation: {
-          required: true,
-          valid: true,
-          maxlingth: null,
-          minlingth: null
-        }
+      title: "form title",
+      them: {
+        r: "31",
+        g: "53",
+        b: "51",
+        a: "1"
       }
-    ],
+    },
+    questions: [],
     validat: false,
-    editindex: 0
+    editindex: 0,
+    redirect: false
   };
   componentDidMount() {
-    console.log(this.props);
-    if (this.props.made || this.props.edit) {
+    const headers = {
+      Authorization: JSON.parse(localStorage.getItem("token"))
+    };
+    if (this.props.edit) {
       axiosQ
-        .get("/forms/" + this.props.match.params.id)
+        .post("/forms/" + this.props.match.params.id, { headers: headers })
         .then(res => {
-          console.log(res);
-          const questions = [...res.data];
-          this.setState({ questions: questions });
+          let form = { title: res.data.data.title, them: res.data.data.them };
+          const questions = [...res.data.data.questions];
+          this.setState({ questions: questions, form: form });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else if (this.props.made) {
+      axiosQ
+        .get("forms/" + this.props.match.params.id)
+        .then(res => {
+          let form = { title: res.data.data.title, them: res.data.data.them };
+          const questions = [...res.data.data.questions];
+          this.setState({ questions: questions, form: form });
         })
         .catch(error => {
           console.log(error);
         });
     }
   }
+  themChangehandler = color => {
+    const newForm = { ...this.state.form };
+    newForm.them = color.rgb;
+    this.setState({ form: newForm });
+  };
   textOnChangeHandler = (answer, index) => {
     const questions = [...this.state.questions];
     //questions[index].answer = e.currentTarget.value;
@@ -73,13 +84,11 @@ class SurveyBuilder extends Component {
     if (rules.required) {
       isValid = value.trim() !== "";
     }
-    if (rules.minlingth) {
+    if (rules.minlingth !== -10000) {
       isValid = value.length >= rules.minlingth && isValid;
     }
-    if (rules.minlingth) {
-      isValid = value.length >= rules.minlingth && isValid;
-    }
-    if (rules.maxlingth) {
+
+    if (rules.maxlingth !== 10000) {
       isValid = value.length <= rules.maxlingth && isValid;
     }
     return isValid;
@@ -87,14 +96,26 @@ class SurveyBuilder extends Component {
   submitHandler = e => {
     console.log(this.state);
     const questions = [...this.state.questions];
+    const headers = {
+      Authorization: JSON.parse(localStorage.getItem("token"))
+    };
     const form = { ...this.state.form, questions };
+
     e.preventDefault();
-    if (!this.props.made) {
+    if (this.props.edit) {
+      const headers = {
+        Authorization: JSON.parse(localStorage.getItem("token"))
+      };
       axiosQ
-        .post("makeid/questions", form)
-        .then(res => console.log(res))
+        .put("forms/" + this.props.id, form, { headers: headers })
+        .then(res => {
+          console.log(res);
+          if (!res.data.danger) {
+            this.setState({ redirect: true });
+          }
+        })
         .catch(error => console.log(error));
-    } else {
+    } else if (this.props.made) {
       questions.forEach(elem => {
         elem.validation.valid = this.checkValidity(
           elem.answer,
@@ -112,6 +133,15 @@ class SurveyBuilder extends Component {
           .then(res => console.log(res))
           .catch(error => console.log(error));
       }
+    } else {
+      axiosQ
+        .post("forms", form, { headers: headers })
+        .then(res => {
+          if (!res.data.danger) {
+            this.setState({ redirect: true });
+          }
+        })
+        .catch(error => console.log(error));
     }
   };
   addQuestionHandler = question => {
@@ -139,6 +169,7 @@ class SurveyBuilder extends Component {
       this.setState({ questions });
     }
   };
+
   render() {
     let questionContant = (
       <QuestionsContainer
@@ -151,11 +182,52 @@ class SurveyBuilder extends Component {
       />
     );
     const bgStyle = {
-      backgroundColor: this.state.form.them
+      backgroundColor: `rgba(${this.state.form.them.r}, ${
+        this.state.form.them.g
+      }, ${this.state.form.them.b}, ${this.state.form.them.a})`
+    };
+    var r = parseInt(this.state.form.them.r, 16);
+    var g = parseInt(this.state.form.them.g, 16);
+    var b = parseInt(this.state.form.them.b, 16);
+    var yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    const hex = yiq >= 230 ? "#000" : "#fff";
+    const textColor = {
+      color: hex,
+      padding: "20px",
+      fontSize: "28px",
+      fontWeight: "28px",
+      marginLeft: "-20%"
     };
     return (
       <React.Fragment>
-        <div style={bgStyle} className="surveyBuilderColor" />
+        {this.state.redirect ? <Redirect to="/" /> : null}
+        <div style={bgStyle} className="surveyBuilderColor">
+          <MDBFormInline>
+            <MDBBtn
+              onClick={e => {
+                window.print();
+              }}
+              floating
+              color="primary"
+              className="btn-floating "
+            >
+              <MDBIcon icon="print" size="3x" />
+            </MDBBtn>
+            <div className="m-auto">
+              <MDBInput
+                className="text-center"
+                style={textColor}
+                value={this.state.form.title}
+                onChange={e => {
+                  const newValue = e.currentTarget.value;
+                  const form = { ...this.state.form };
+                  form.title = newValue;
+                  this.setState({ form });
+                }}
+              />
+            </div>
+          </MDBFormInline>
+        </div>
         <div className="surveyBuilderContant">
           {questionContant}
           <Edit
@@ -164,6 +236,7 @@ class SurveyBuilder extends Component {
             addEditHandler={this.addEditQuestionHandler}
             add={this.addQuestionHandler}
             remove={this.removeQuestionHandler}
+            themChangehandler={this.themChangehandler}
           />
         </div>
       </React.Fragment>

@@ -1,10 +1,9 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
+import axiosQ from "./axios/axios-question";
 import Loginpage from "./components/pages/LoginPage/LoginPage";
 import SurveyBuilder from "./Containers/SurveyBuilder/SurveyBuilder";
 import ProfilePage from "./components/pages/Profile/ProfilePage";
-import axiosQ from "./axios/axios-question";
-
 class Routes extends React.Component {
   state = {
     authData: {
@@ -84,13 +83,16 @@ class Routes extends React.Component {
           exact
           render={props => <SurveyBuilder {...props} />}
         />
+
         <Route
-          path="/SurveyLab/:id"
-          render={props => <SurveyBuilder made={true} {...props} />}
+          path="/Survey/edit/:id"
+          exact
+          render={props => <SurveyBuilder edit={true} {...props} />}
         />
         <Route
-          path="/SurveyLab/edit/:id"
-          render={props => <SurveyBuilder edit={true} {...props} />}
+          path="/SurveyLab/:id"
+          exact
+          render={props => <SurveyBuilder made={true} {...props} />}
         />
         <Route
           path="/"
@@ -113,6 +115,10 @@ class Routes extends React.Component {
           render={props => (
             <Loginpage log={true} logHandler={this.SignInHandler} {...props} />
           )}
+        />
+        <Route
+          path="/SurveyLab/:id"
+          render={props => <SurveyBuilder made={true} {...props} />}
         />
         <Redirect from="/" to="/SignIn" />
       </Switch>

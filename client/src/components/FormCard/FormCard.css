@@ -7,3 +7,26 @@
 .formBtn {
     padding: 0.84rem 1.5rem;
 }
+
+.lockbtn {
+    background-color: #fffefe08 !important;
+    color: #333030;
+    box-shadow: none;
+    /* position: fixed; */
+    padding: 0px;
+    margin: 0;
+    top: 11.5%;
+    right: -50%;
+    font-size: 14px;
+}
+
+.lockbtn:hover, .btn-default:focus, .btn-default:active {
+    color: #333030;
+    background-color: #fffefe08;
+    box-shadow: none;
+}
+
+.lockbtn.btn-default:not([disabled]):not(.disabled):active {
+    background-color: #fffefe08 !important;
+    box-shadow: none
+}
