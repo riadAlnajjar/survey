@@ -7,7 +7,7 @@
 }
 
 .profilePage .rs-uploader-picture {
-    margin:  auto;
+    margin: auto;
     width: 90%;
     height: 250px;
 }
@@ -16,3 +16,72 @@
     width: 100%;
     height: 100%;
 }
+
+.profilePage .inputImageDiv {
+    border: 2px dashed #d8d1d1;
+    margin: 20px auto;
+    width: 92%;
+    height: 200px;
+}
+
+.profilePage input[type="file"] {
+    opacity: 0;
+    position: fixed;
+    height: 200px;
+    width: 390px;
+}
+
+.profilePage .inputImageDiv .cameraBtn {
+    margin: 84px auto;
+    display: block;
+    background: #fff0;
+}
+
+.profilePage .setting-btn {
+    background-color: #fffefe08 !important;
+    color: #333030;
+    box-shadow: none;
+    /* position: fixed; */
+    padding: 0px;
+    margin: 0;
+    top: 11.5%;
+    right: -96%;
+    font-size: 14px;
+}
+
+.profilePage .setting-btn:hover, .btn-default:focus, .btn-default:active {
+    color: #333030;
+    background-color: #fffefe08;
+    box-shadow: none;
+}
+
+.profilePage .setting-btn.btn-default:not([disabled]):not(.disabled):active {
+    background-color: #fffefe08 !important;
+    box-shadow: none
+}
+
+.profilePage .view img, .view video {
+    position: relative;
+    display: block;
+    height: 258px;
+    max-width: 100%;
+    z-index: 10;
+}
+
+.imageChangeDiv input[type="file"] {
+    padding: 12px;
+    margin: auto;
+    display: block;
+    width: 112px;
+}
+
+.rgba-black-slight {
+    background-image: linear-gradient(129deg, #0d2b3e 2%, #4e1038 100%);
+}
+
+/* .profilePage .card.card-cascade .view.view-cascade {
+    -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15);
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15);
+    -webkit-border-radius: 1.25rem;
+    border-radius: 0.25rem;
+} */

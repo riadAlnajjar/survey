@@ -4,7 +4,7 @@ import Routes from "./Routes";
 class App extends Component {
   render() {
     return (
-      <div>
+      <div style={{ overflow: "hidden" }}>
         <main>
           <Routes />
         </main>

@@ -103,9 +103,6 @@ class SurveyBuilder extends Component {
 
     e.preventDefault();
     if (this.props.edit) {
-      const headers = {
-        Authorization: JSON.parse(localStorage.getItem("token"))
-      };
       axiosQ
         .put("forms/" + this.props.id, form, { headers: headers })
         .then(res => {

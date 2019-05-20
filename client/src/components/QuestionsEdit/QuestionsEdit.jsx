@@ -315,7 +315,9 @@ class Edit extends Component {
                           : this.state.question.validation.maxlingth
                       }
                       onChange={e => {
-                        const newValue = e.currentTarget.value;
+                        const newValue = (e.currentTarget.value = ""
+                          ? 10000
+                          : e.currentTarget.value);
                         const question = { ...this.state.question };
                         question.validation.maxlingth = newValue;
                         this.setState({ question });
@@ -331,7 +333,9 @@ class Edit extends Component {
                           : this.state.question.validation.minlingth
                       }
                       onChange={e => {
-                        const newValue = e.currentTarget.value;
+                        const newValue = (e.currentTarget.value = ""
+                          ? -10000
+                          : e.currentTarget.value);
                         const question = { ...this.state.question };
                         question.validation.minlingth = newValue;
                         this.setState({ question });
@@ -371,17 +375,17 @@ class Edit extends Component {
               <MDBBtn
                 color="primary"
                 onClick={() => {
+                  console.log("state :", this.state);
                   if (
-                    this.state.question.validation.maxlingth <
-                    this.state.question.validation.minlingth
+                    parseInt(this.state.question.validation.maxlingth) <
+                    parseInt(this.state.question.validation.minlingth)
                   ) {
                     this.setState({ maxerror: true });
-                  }
-
-                  if (
-                    this.state.question.validation.maxlingth >
-                    this.state.question.validation.minlingth
+                  } else if (
+                    parseInt(this.state.question.validation.maxlingth) >
+                    parseInt(this.state.question.validation.minlingth)
                   ) {
+                    this.setState({ maxerror: false });
                     if (!this.state.editmode) {
                       this.addHandler();
                     } else {
@@ -389,7 +393,6 @@ class Edit extends Component {
 
                       this.toggle();
                       this.setState({ editmode: false });
-                      this.setState({ maxerror: true });
                     }
                   }
                 }}

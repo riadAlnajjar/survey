@@ -30,8 +30,8 @@ class QuestionsContainer extends Component {
     let submit;
     this.state.loading
       ? (submit = (
-          <div class="spinner-border text-primary m-auto" role="status">
-            <span class="sr-only">Loading...</span>
+          <div className="spinner-border text-primary m-auto" role="status">
+            <span className="sr-only">Loading...</span>
           </div>
         ))
       : (submit = (

@@ -20,7 +20,8 @@
     display: list-item;
     text-align: -webkit-match-parent;
     list-style: none;
-    margin-left: 4rem;
+    margin-left: 2rem;
+    padding: 13px 0px;
 }
 
 .nav-item a {
@@ -30,11 +31,12 @@
     font-size: 22px;
 }
 
-.nav-item.active a {
+/* .nav-item.active a {
     background-color: rgba(255, 255, 255, .1);
-}
+} */
 
 .nav-item a:hover {
     background-color: #7034462a;
+    border: 4px solid #7034466b;
     color: rgb(231, 222, 222)
 }

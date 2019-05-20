@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Uploader, Icon } from "rsuite";
+import { Icon } from "rsuite";
 import NavBar from "../../Nav/NavBar";
 import {
   MDBCard,
@@ -10,19 +10,27 @@ import {
   MDBCardTitle,
   MDBBtn,
   MDBIcon,
-  MDBBtnGroup
+  MDBBtnGroup,
+  MDBView,
+  MDBMask,
+  MDBModal,
+  MDBModalBody,
+  MDBModalHeader,
+  MDBModalFooter
 } from "mdbreact";
 
 import axiosQ from "../../../axios/axios-question";
 import "./ProfilePage.css";
 import FormCard from "../../FormCard/FormCard";
 import { Redirect } from "react-router-dom";
+import Backdrop from "../../Backdrop/Backdrop";
 
 class ProfilePage extends Component {
   state = {
     forms: [],
     redirect: false,
-    image: []
+    image: null,
+    modal: false
   };
   componentDidMount() {
     const headers = {
@@ -39,9 +47,18 @@ class ProfilePage extends Component {
         console.log(error);
       });
   }
-  imageHandleChange = image => {
-    this.setState({ image: image });
-    console.log(image);
+  toggle = () => {
+    this.setState({ modal: !this.state.modal });
+  };
+  imageHandleChange = e => {
+    var input = e.target;
+    var reader = new FileReader();
+    let dataURL;
+    reader.onload = () => {
+      dataURL = reader.result;
+      this.setState({ image: dataURL });
+    };
+    reader.readAsDataURL(input.files[0]);
   };
   remove = index => {
     let forms = [...this.state.forms];
@@ -50,7 +67,6 @@ class ProfilePage extends Component {
       this.setState({ forms });
     }
   };
-
   render() {
     let formCards = null;
     if (this.state.forms) {
@@ -73,74 +89,89 @@ class ProfilePage extends Component {
     }
     return (
       <React.Fragment>
-        {redirect}
-
-        <div className="profilePage ">
-          <NavBar
-            linkDisplay
-            colorStyle={{ color: "#000" }}
-            logOutHandler={this.props.logOutHandler}
-          />
-          <MDBRow className="justify-content-center">
-            <MDBCol sm="12" md="6" lg="4" className="mb-5 userCard">
-              <MDBCard>
-                <MDBCardImage
-                  className="img-fluid"
-                  src={this.state.image ? this.state.image[0] : null}
-                />
-                <Uploader
-                  multiple={false}
-                  disabled
-                  fileList={this.state.image}
-                  listType="picture"
-                  action="//jsonplaceholder.typicode.com/posts/"
-                  onChange={e => {
-                    this.setState({ image: e });
-                    console.log(this.state.image);
-                    setTimeout(() => {
-                      this.setState({ image: e });
-                      console.log(this.state.image);
-                    }, 3000);
-                  }}
-                >
-                  <button>
-                    <Icon icon="camera-retro" size="lg" />
-                  </button>
-                </Uploader>
-                <MDBCardBody>
-                  <MDBCardTitle className="text-center mb-2 font-bold">
-                    {JSON.parse(localStorage.getItem("authData")).name}
-                  </MDBCardTitle>
-                  <MDBCardTitle
-                    sub
-                    className="text-center indigo-text mb-2 font-bold"
-                  >
-                    {JSON.parse(localStorage.getItem("authData")).email}
-                  </MDBCardTitle>
-                </MDBCardBody>
-              </MDBCard>
-            </MDBCol>
-            <MDBCol md="6" lg="7" className="formCard">
-              <section className="text-center pb-3">
-                <MDBRow className="d-flex justify-content-center">
-                  {formCards}
-                  <MDBCol lg="6" xl="5" className="mb-3">
-                    <MDBBtn
-                      onClick={e => {
-                        this.setState({ redirect: true });
-                      }}
-                      floating
-                      color="primary"
-                      className="form-add "
+        <div className="formG">
+          {redirect}
+          <div className="profilePage ">
+            <NavBar
+              linkDisplay
+              colorStyle={{ color: "#fff" }}
+              logOutHandler={this.props.logOutHandler}
+            />
+            <MDBRow className="justify-content-center">
+              <MDBCol sm="12" md="6" lg="4" className="mb-5 userCard">
+                <MDBCard className="card-cascade ">
+                  {}
+                  {this.state.image ? (
+                    <MDBView className="view-cascade">
+                      <MDBCardImage
+                        className="img-fluid mx-auto img-responsive"
+                        src={this.state.image ? this.state.image : null}
+                      />
+                      <MDBMask className="flex-center" overlay="black-slight" />
+                    </MDBView>
+                  ) : (
+                    <div className="inputImageDiv">
+                      <input type="file" onChange={this.imageHandleChange} />
+                      <div>
+                        <button className="cameraBtn">
+                          <Icon icon="camera-retro" size="lg" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  <MDBCardBody>
+                    <MDBCardTitle className="text-center mb-2 font-bold">
+                      {JSON.parse(localStorage.getItem("authData")).name}
+                    </MDBCardTitle>
+                    <MDBCardTitle
+                      sub
+                      className="text-center indigo-text mb-2 font-bold"
                     >
-                      <MDBIcon icon="plus" size="4x" />
+                      {JSON.parse(localStorage.getItem("authData")).email}
+                    </MDBCardTitle>
+                    <MDBBtn onClick={this.toggle} className="setting-btn ">
+                      <MDBIcon icon="cog" />
                     </MDBBtn>
-                  </MDBCol>
-                </MDBRow>
-              </section>
-            </MDBCol>
-          </MDBRow>
-          <MDBBtnGroup />
+                  </MDBCardBody>
+                </MDBCard>
+              </MDBCol>
+              <MDBCol md="6" lg="7" className="formCard">
+                <section className="text-center pb-3">
+                  <MDBRow className="d-flex justify-content-center">
+                    {formCards}
+                    <MDBCol lg="6" xl="5" className="mb-3">
+                      <MDBBtn
+                        onClick={e => {
+                          this.setState({ redirect: true });
+                        }}
+                        floating
+                        color="primary"
+                        className="form-add "
+                      >
+                        <MDBIcon icon="plus" size="4x" />
+                      </MDBBtn>
+                    </MDBCol>
+                  </MDBRow>
+                </section>
+              </MDBCol>
+            </MDBRow>
+            <MDBBtnGroup />
+          </div>
+          <MDBModal
+            fullHeight
+            position="left"
+            isOpen={this.state.modal}
+            toggle={this.toggle}
+          >
+            <MDBModalHeader className="text-center">settings</MDBModalHeader>
+            <MDBModalBody className="text-center">
+              <h1> change your profile picture </h1>
+              <div className="imageChangeDiv">
+                <input type="file" onChange={this.imageHandleChange} />
+              </div>
+            </MDBModalBody>
+          </MDBModal>
+          <Backdrop show />
         </div>
       </React.Fragment>
     );
