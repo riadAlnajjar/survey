@@ -19,38 +19,39 @@ class Edit extends Component {
   state = {
     modal: false,
     question: {
-      type: "text",
+      type: "PlainText",
       question: "",
       answer: "",
-      rightanswer: "",
+      correct_answer: "",
       choices: [],
-      marks: [],
+      mark: "",
       validation: {
         required: false,
         valid: true,
-        maxlingth: 10000,
-        minlingth: -10000
+        maxlength: 10000,
+        minlength: -10000
       }
     },
     choice: "",
     editmode: false,
     displayColorPicker: false,
-    color: "#ff3533",
+    color: "#333333",
     maxerror: false
   };
   clearState = () => {
     if (this.state.question.question.trim() !== "") {
       const question = {
-        type: "text",
+        type: "PlainText",
         question: "",
         answer: "",
+        correct_answer: "",
         choices: [],
-        marks: [],
+        mark: "",
         validation: {
           required: false,
           valid: true,
-          maxlingth: 10000,
-          minlingth: -10000
+          maxlength: 10000,
+          minlength: -10000
         }
       };
       this.setState({ question });
@@ -76,13 +77,14 @@ class Edit extends Component {
     if (choice.trim() !== "") {
       this.removeChoice();
       if (
-        this.state.question.type === "select" ||
-        this.state.question.type === "radiobuttons"
+        this.state.question.type === "Spinner" ||
+        this.state.question.type === "RadioButton"
       ) {
-        question.choices.push(choice);
+        const choices = { label: choice };
+        question.choices.push(choices);
         this.setState({ question });
         console.log(this.state);
-      } else if (this.state.question.type === "checkbox") {
+      } else if (this.state.question.type === "CheckBox") {
         const newchoices = { label: choice, checked: false };
         question.choices.push(newchoices);
         this.setState({ question });
@@ -103,23 +105,16 @@ class Edit extends Component {
     let selectChoices = null;
     let addedChoices = null;
     if (
-      this.state.question.type === "select" ||
-      this.state.question.type === "checkbox" ||
-      this.state.question.type === "radiobuttons"
+      this.state.question.type === "Spinner" ||
+      this.state.question.type === "CheckBox" ||
+      this.state.question.type === "RadioButton"
     ) {
       if (this.state.question.choices !== []) {
         addedChoices = this.state.question.choices.map((choice, index) => {
           return (
             <MDBRow key={index}>
               <MDBCol>
-                <MDBInput
-                  label={
-                    this.state.question.type === "checkbox"
-                      ? choice.label
-                      : choice
-                  }
-                  disabled
-                />
+                <MDBInput label={choice.label} disabled />
               </MDBCol>
               <MDBCol>
                 <MDBBtn
@@ -193,7 +188,7 @@ class Edit extends Component {
                   triangle="hide"
                   color={this.state.color}
                   onChange={e => {
-                    this.setState({ color: e.rgb });
+                    this.setState({ color: e.hex });
                     this.props.themChangehandler(e);
                   }}
                   colors={[
@@ -277,17 +272,17 @@ class Edit extends Component {
                   <option disabled defaultValue="question Type">
                     question Type
                   </option>
-                  <option value="text">text</option>
-                  <option value="number">Number</option>
-                  <option value="select">select</option>
-                  <option value="checkbox">CheckBox</option>
-                  <option value="radiobuttons">Radio</option>
+                  <option value="PlainText">text</option>
+                  <option value="Number">Number</option>
+                  <option value="Spinner">select</option>
+                  <option value="CheckBox">CheckBox</option>
+                  <option value="RadioButton">Radio</option>
                   <option value="DateTimePicker">Date & Time Picker</option>
-                  <option value="DatePicker">Date Picker</option>
-                  <option value="TimePicker">Time Picker</option>
-                  <option value="Slider">Slider</option>
+                  <option value="Date">Date Picker</option>
+                  <option value="Time">Time Picker</option>
+                  <option value="Seekbar">Slider</option>
                   <option value="StarRating">Star Rating</option>
-                  <option value="ColorPicker">Color Picker </option>
+                  <option value="Color">Color Picker </option>
                 </select>
               </div>
               {selectChoices}
@@ -302,24 +297,24 @@ class Edit extends Component {
                 size="lg"
                 label="question"
               />
-              {this.state.question.type === "text" ||
-              this.state.question.type === "number" ? (
+              {this.state.question.type === "PlainText" ||
+              this.state.question.type === "Number" ? (
                 <div className={this.state.maxerror ? "required" : ""}>
                   <MDBFormInline className=" lingth">
                     <MDBInput
                       label="max"
                       type="number"
                       value={
-                        this.state.question.validation.maxlingth === 10000
+                        this.state.question.validation.maxlength === 10000
                           ? ""
-                          : this.state.question.validation.maxlingth
+                          : this.state.question.validation.maxlength
                       }
                       onChange={e => {
                         const newValue = (e.currentTarget.value = ""
                           ? 10000
                           : e.currentTarget.value);
                         const question = { ...this.state.question };
-                        question.validation.maxlingth = newValue;
+                        question.validation.maxlength = newValue;
                         this.setState({ question });
                       }}
                       size="sm"
@@ -377,13 +372,13 @@ class Edit extends Component {
                 onClick={() => {
                   console.log("state :", this.state);
                   if (
-                    parseInt(this.state.question.validation.maxlingth) <
-                    parseInt(this.state.question.validation.minlingth)
+                    parseInt(this.state.question.validation.maxlength) <
+                    parseInt(this.state.question.validation.minlength)
                   ) {
                     this.setState({ maxerror: true });
                   } else if (
-                    parseInt(this.state.question.validation.maxlingth) >
-                    parseInt(this.state.question.validation.minlingth)
+                    parseInt(this.state.question.validation.maxlength) >
+                    parseInt(this.state.question.validation.minlength)
                   ) {
                     this.setState({ maxerror: false });
                     if (!this.state.editmode) {

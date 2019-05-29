@@ -1,5 +1,5 @@
 .surveyBuilderColor {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     height: 185px;
@@ -9,4 +9,14 @@
 
 .surveyBuilderContant {
     margin-top: 111px;
+    /* background: #fff;
+    position: relative;
+    margin: 20px auto;
+    margin-top: 146px;
+    border-radius: 28px;
+    padding: 1px;
+    padding-bottom: 15px;
+    width: 96%;
+    min-height: 401px;
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15); */
 }

@@ -47,6 +47,9 @@ class QuestionsContainer extends Component {
             Submit Form
           </MDBBtn>
         ));
+    if (this.props.fillDone) {
+      submit = <h6 className="m-auto">done</h6>;
+    }
     return (
       <div className="">
         <MDBContainer className="question-container">

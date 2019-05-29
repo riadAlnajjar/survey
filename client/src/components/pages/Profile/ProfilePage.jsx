@@ -37,11 +37,30 @@ class ProfilePage extends Component {
       Authorization: JSON.parse(localStorage.getItem("token"))
     };
     axiosQ
-      .get("/forms", { headers: headers })
+      .get("/forms/u/", { headers: headers })
       .then(res => {
+        if (res.data.danger) {
+          const messages = res.data.messages;
+          alert(messages);
+        }
         console.log(res);
         const forms = [...res.data.data];
         this.setState({ forms: forms });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    axiosQ
+      .get("users/pic", { headers: headers })
+      .then(res => {
+        if (res.data.danger) {
+          const messages = res.data.messages;
+          alert(messages);
+        } else {
+          console.log(res);
+          this.setState({ image: res.data.data });
+        }
       })
       .catch(error => {
         console.log(error);
@@ -57,6 +76,20 @@ class ProfilePage extends Component {
     reader.onload = () => {
       dataURL = reader.result;
       this.setState({ image: dataURL });
+      const headers = {
+        Authorization: JSON.parse(localStorage.getItem("token"))
+      };
+      axiosQ
+        .post("users/edit", { image: this.state.image }, { headers: headers })
+        .then(res => {
+          if (res.data.danger) {
+            const messages = res.data.messages;
+            alert(messages);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     };
     reader.readAsDataURL(input.files[0]);
   };
@@ -99,9 +132,9 @@ class ProfilePage extends Component {
             />
             <MDBRow className="justify-content-center">
               <MDBCol sm="12" md="6" lg="4" className="mb-5 userCard">
-                <MDBCard className="card-cascade ">
-                  {}
-                  {this.state.image ? (
+                <MDBCard className="card-cascade " style={{ margin: "-10px" }}>
+                  {console.log(this.state.image)}
+                  {this.state.image && this.state.image !== "" ? (
                     <MDBView className="view-cascade">
                       <MDBCardImage
                         className="img-fluid mx-auto img-responsive"

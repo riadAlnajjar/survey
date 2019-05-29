@@ -16,16 +16,22 @@ import { Redirect } from "react-router-dom";
 import axiosQ from "../../axios/axios-question";
 class FormCard extends Component {
   state = {
-    redirect: false,
-    path: "/Survey/edit/" + this.props.id
+    redirect1: false,
+    redirect2: false,
+    path1: "/Survey/edit/" + this.props.id,
+    path2: "/report/" + this.props.id // /report/F21MGr47TMi210TM0330a1103y990021GG0
   };
   deletHandler = () => {
     const headers = {
       Authorization: JSON.parse(localStorage.getItem("token"))
     };
     axiosQ
-      .delete("forms/" + this.props.id, { headers: headers })
+      .delete("forms/u/" + this.props.id, { headers: headers })
       .then(res => {
+        if (res.data.danger) {
+          const messages = res.data.messages;
+          alert(messages);
+        }
         if (!res.data.danger) {
           this.props.remove(this.props.index);
         }
@@ -38,25 +44,49 @@ class FormCard extends Component {
     };
     axiosQ
       // .put("forms/" + this.props.id, { headers: headers })
-      .post("forms/" + this.props.id, { headers: headers })
+      .get("forms/u/" + this.props.id, { headers: headers })
       .then(res => {
-        this.setState({ redirect: true });
+        if (res.data.danger) {
+          const messages = res.data.messages;
+          alert(messages);
+        } else {
+          this.setState({ redirect1: true });
+        }
       })
       .catch(error => console.log(error));
+  };
+  reportHandeler = () => {
+    this.setState({ redirect2: true });
+    //   const headers = {
+    //     Authorization: JSON.parse(localStorage.getItem("token"))
+    //   };
+    //   axiosQ
+    //     .post("forms/u/" + this.props.id, { headers: headers })
+    //     .then(res => {
+    //       if (res.data.danger) {
+    //         const messages = res.data.messages;
+    //         alert(messages);
+    //       }
+    //       this.setState({ redirect2: true });
+    //     })
+    //     .catch(error => console.log(error));
   };
   render() {
     return (
       <React.Fragment>
-        {this.state.redirect ? <Redirect to={this.state.path} /> : null}
+        {this.state.redirect2 ? (
+          <Redirect from="/" to={this.state.path2} />
+        ) : null}
+        {this.state.redirect1 ? <Redirect to={this.state.path1} /> : null}
         <MDBCol lg="6" xl="5" className="mb-3">
-          <MDBCard className="d-flex mb-5">
+          <MDBCard className="d-flex mb-5 form">
             <div
               className="formColor"
-              style={{
-                backgroundColor: `rgba(${this.props.color.r}, ${
-                  this.props.color.g
-                }, ${this.props.color.b}, ${this.props.color.a})`
-              }}
+              // style={{
+              //   backgroundColor: `rgba(${this.props.color.r}, ${
+              //     this.props.color.g
+              //   }, ${this.props.color.b}, ${this.props.color.a})`
+              // }}
             />
 
             <MDBCardBody>
@@ -78,7 +108,7 @@ class FormCard extends Component {
                   <MDBIcon icon="flask" />
                 </MDBBtn>
                 <CopyToClipboard
-                  text={"http://192.168.1.106:3000/SurveyLab/" + this.props.id}
+                  text={"http://192.168.43.110:3000/SurveyLab/" + this.props.id}
                 >
                   <MDBBtn
                     color="unique-color-dark"
@@ -90,6 +120,7 @@ class FormCard extends Component {
                 <MDBBtn
                   color="cyan darken-4"
                   className="cyan darken-4 text-white formBtn "
+                  onClick={this.reportHandeler}
                 >
                   <MDBIcon icon="book-reader" />
                 </MDBBtn>

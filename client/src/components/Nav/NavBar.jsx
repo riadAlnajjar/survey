@@ -55,6 +55,13 @@ class NavBar extends React.Component {
                         laboratory
                       </NavLink>
                     </MDBNavItem>
+                    {this.props.profile ? (
+                      <MDBNavItem active>
+                        <NavLink style={this.props.colorStyle} to="/" exact>
+                          Profile
+                        </NavLink>
+                      </MDBNavItem>
+                    ) : null}
                     <MDBNavItem active>
                       <NavLink
                         style={this.props.colorStyle}

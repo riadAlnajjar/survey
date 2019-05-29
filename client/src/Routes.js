@@ -4,6 +4,8 @@ import axiosQ from "./axios/axios-question";
 import Loginpage from "./components/pages/LoginPage/LoginPage";
 import SurveyBuilder from "./Containers/SurveyBuilder/SurveyBuilder";
 import ProfilePage from "./components/pages/Profile/ProfilePage";
+import ReportPage from "./components/pages/reportPage/reportPage";
+
 class Routes extends React.Component {
   state = {
     authData: {
@@ -40,6 +42,10 @@ class Routes extends React.Component {
         auth.password = "";
         auth.password2 = "";
         this.setState({ authData: auth });
+        if (res.data.danger) {
+          const messages = res.data.messages;
+          alert(messages);
+        }
         if (!res.data.danger) {
           let authData = { name: "", email: "" };
           authData.name = auth.name;
@@ -61,6 +67,10 @@ class Routes extends React.Component {
       .post("users/register", auth)
       .then(res => {
         console.log(res);
+        if (res.data.danger) {
+          const messages = res.data.messages;
+          alert(messages);
+        }
         if (!res.data.danger) {
           this.SignInHandler(auth);
         }
@@ -79,6 +89,13 @@ class Routes extends React.Component {
         <Redirect from="/SignUp" to="/" />
         <Redirect from="/SignIn" to="/" />
         <Route
+          path="/report/:id"
+          exact
+          render={props => (
+            <ReportPage {...props} logOutHandler={this.logOutHandler} />
+          )}
+        />
+        <Route
           path="/SurveyLab"
           exact
           render={props => <SurveyBuilder {...props} />}
@@ -89,6 +106,7 @@ class Routes extends React.Component {
           exact
           render={props => <SurveyBuilder edit={true} {...props} />}
         />
+
         <Route
           path="/SurveyLab/:id"
           exact

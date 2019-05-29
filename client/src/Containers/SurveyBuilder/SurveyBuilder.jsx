@@ -10,27 +10,33 @@ class SurveyBuilder extends Component {
   state = {
     form: {
       title: "form title",
-      them: {
-        r: "31",
-        g: "53",
-        b: "51",
-        a: "1"
-      }
+      enable: true,
+      theme: "#333333"
     },
     questions: [],
     validat: false,
     editindex: 0,
-    redirect: false
+    redirect: false,
+    fillDone: false
   };
   componentDidMount() {
+    console.log(this.props);
     const headers = {
       Authorization: JSON.parse(localStorage.getItem("token"))
     };
     if (this.props.edit) {
       axiosQ
-        .post("/forms/" + this.props.match.params.id, { headers: headers })
+        .get("/forms/u/" + this.props.match.params.id, { headers: headers })
         .then(res => {
-          let form = { title: res.data.data.title, them: res.data.data.them };
+          if (res.data.danger) {
+            const messages = res.data.messages;
+            alert(messages);
+          }
+          let form = {
+            title: res.data.data.title,
+            theme: res.data.data.theme,
+            enable: true
+          };
           const questions = [...res.data.data.questions];
           this.setState({ questions: questions, form: form });
         })
@@ -39,9 +45,17 @@ class SurveyBuilder extends Component {
         });
     } else if (this.props.made) {
       axiosQ
-        .get("forms/" + this.props.match.params.id)
+        .get("forms/c/" + this.props.match.params.id)
         .then(res => {
-          let form = { title: res.data.data.title, them: res.data.data.them };
+          if (res.data.danger) {
+            const messages = res.data.messages;
+            alert(messages);
+          }
+          let form = {
+            title: res.data.data.title,
+            theme: res.data.data.theme,
+            enable: true
+          };
           const questions = [...res.data.data.questions];
           this.setState({ questions: questions, form: form });
         })
@@ -52,7 +66,7 @@ class SurveyBuilder extends Component {
   }
   themChangehandler = color => {
     const newForm = { ...this.state.form };
-    newForm.them = color.rgb;
+    newForm.theme = color.hex;
     this.setState({ form: newForm });
   };
   textOnChangeHandler = (answer, index) => {
@@ -70,7 +84,7 @@ class SurveyBuilder extends Component {
   };
   checkOnChangeHandler = (Qindex, Cindex) => {
     const questions = [...this.state.questions];
-    if (questions[Qindex].type === "checkbox") {
+    if (questions[Qindex].type === "CheckBox") {
       questions[Qindex].choices[Cindex].checked = !questions[Qindex].choices[
         Cindex
       ].checked;
@@ -84,17 +98,18 @@ class SurveyBuilder extends Component {
     if (rules.required) {
       isValid = value.trim() !== "";
     }
-    if (rules.minlingth !== -10000) {
-      isValid = value.length >= rules.minlingth && isValid;
+    if (rules.minlength !== -10000) {
+      isValid = value.length >= rules.minlength && isValid;
     }
 
-    if (rules.maxlingth !== 10000) {
-      isValid = value.length <= rules.maxlingth && isValid;
+    if (rules.maxlength !== 10000) {
+      isValid = value.length <= rules.maxlength && isValid;
     }
     return isValid;
   };
   submitHandler = e => {
     console.log(this.state);
+    console.log(this.props.match.params.id);
     const questions = [...this.state.questions];
     const headers = {
       Authorization: JSON.parse(localStorage.getItem("token"))
@@ -104,7 +119,9 @@ class SurveyBuilder extends Component {
     e.preventDefault();
     if (this.props.edit) {
       axiosQ
-        .put("forms/" + this.props.id, form, { headers: headers })
+        .put("forms/u/" + this.props.match.params.id, form, {
+          headers: headers
+        })
         .then(res => {
           console.log(res);
           if (!res.data.danger) {
@@ -125,14 +142,37 @@ class SurveyBuilder extends Component {
         allvaled = elem.validation.valid && allvaled;
       });
       if (allvaled) {
+        let ans = [];
+        let ch = [];
+        this.state.questions.map(elm => {
+          if (elm.type === "CheckBox") {
+            elm.choices.map(elm => {
+              if (elm.checked === true) {
+                ch.push(elm.label);
+              }
+            });
+            ans = [...ans, ...ch];
+          }
+          if (elm.type === "RadioButton") {
+            ans.push(elm.choices[elm.answer].label);
+          }
+          ans.push(elm.answer);
+        });
+        const a = { answers: ans };
+        console.log(a);
         axiosQ
-          .post(this.props.match.params.id + "done", questions)
-          .then(res => console.log(res))
+          .post("forms/c/" + this.props.match.params.id, a)
+          .then(res => {
+            if (!res.data.danger) {
+              this.setState({ fillDone: true });
+            }
+            console.log(res);
+          })
           .catch(error => console.log(error));
       }
     } else {
       axiosQ
-        .post("forms", form, { headers: headers })
+        .post("forms/u/", form, { headers: headers })
         .then(res => {
           if (!res.data.danger) {
             this.setState({ redirect: true });
@@ -174,18 +214,20 @@ class SurveyBuilder extends Component {
         checkOnChangeHandler={this.checkOnChangeHandler}
         questions={this.state.questions}
         submit={this.submitHandler}
+        fillDone={this.state.fillDone}
         validat={this.state.validat}
         setEditindex={this.setEditindex}
       />
     );
     const bgStyle = {
-      backgroundColor: `rgba(${this.state.form.them.r}, ${
-        this.state.form.them.g
-      }, ${this.state.form.them.b}, ${this.state.form.them.a})`
+      backgroundColor: this.state.form.theme
+      // backgroundColor: `rgba(${this.state.form.theme.r}, ${
+      //   this.state.form.theme.g
+      // }, ${this.state.form.theme.b}, ${this.state.form.theme.a})`
     };
-    var r = parseInt(this.state.form.them.r, 16);
-    var g = parseInt(this.state.form.them.g, 16);
-    var b = parseInt(this.state.form.them.b, 16);
+    var r = parseInt(this.state.form.theme.r, 16);
+    var g = parseInt(this.state.form.theme.g, 16);
+    var b = parseInt(this.state.form.theme.b, 16);
     var yiq = (r * 299 + g * 587 + b * 114) / 1000;
     const hex = yiq >= 230 ? "#000" : "#fff";
     const textColor = {

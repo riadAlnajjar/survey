@@ -36,7 +36,7 @@ class Question extends Component {
     console.log(this.props);
     let question = null;
     switch (this.props.questions.type) {
-      case "text":
+      case "PlainText":
         question = (
           <div>
             <MDBInput
@@ -54,7 +54,7 @@ class Question extends Component {
           </div>
         );
         break;
-      case "number":
+      case "Number":
         question = (
           <div>
             <MDBRow>
@@ -69,14 +69,14 @@ class Question extends Component {
                 onChange={e => {
                   this.props.textOnChangeHandler(e, this.props.index);
                 }}
-                max={this.props.questions.validation.maxlingth}
-                min={this.props.questions.validation.minlingth}
+                max={this.props.questions.validation.maxlength}
+                min={this.props.questions.validation.minlength}
               />
             </MDBRow>
           </div>
         );
         break;
-      case "select":
+      case "Spinner":
         question = (
           <div className="mt-4 mb-4">
             <select
@@ -94,8 +94,8 @@ class Question extends Component {
               </option>
               {this.props.questions.choices.map((elm, index) => {
                 return (
-                  <option key={index} value={elm}>
-                    {elm}
+                  <option key={index} value={elm.label}>
+                    {elm.label}
                   </option>
                 );
               })}
@@ -103,7 +103,7 @@ class Question extends Component {
           </div>
         );
         break;
-      case "checkbox":
+      case "CheckBox":
         question = (
           <div>
             <MDBRow>
@@ -130,7 +130,7 @@ class Question extends Component {
           </div>
         );
         break;
-      case "radiobuttons":
+      case "RadioButton":
         question = (
           <div>
             <MDBRow>
@@ -143,7 +143,7 @@ class Question extends Component {
                 {this.props.questions.choices.map((elm, index) => {
                   return (
                     <MDBInput
-                      label={elm}
+                      label={elm.label}
                       type="radio"
                       id={"radio" + index}
                       key={index}
@@ -161,7 +161,7 @@ class Question extends Component {
           </div>
         );
         break;
-      case "Slider":
+      case "Seekbar":
         question = (
           <div className="my-5">
             <label htmlFor="customRange1">
@@ -207,7 +207,7 @@ class Question extends Component {
           </div>
         );
         break;
-      case "ColorPicker":
+      case "Color":
         question = (
           <div>
             <MDBRow>
@@ -247,7 +247,7 @@ class Question extends Component {
           </div>
         );
         break;
-      case "TimePicker":
+      case "Time":
         question = (
           <div className="datePicker">
             <h4 className="datePickerLabel">{this.props.questions.question}</h4>
@@ -269,7 +269,7 @@ class Question extends Component {
         );
         break;
 
-      case "DatePicker":
+      case "Date":
         question = (
           <div className="datePicker">
             <h4 className="datePickerLabel">{this.props.questions.question}</h4>
