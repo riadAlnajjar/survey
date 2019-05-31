@@ -199,7 +199,6 @@ class Edit extends Component {
                     "#1b5e20",
                     "#006064",
                     "#00796b",
-                    "#1e88e5",
                     "#1C2331"
                   ]}
                 />

@@ -102,3 +102,42 @@
     width: 100%;
     margin-bottom: 0;
 }
+
+.question input {
+    color: #fff
+}
+
+.md-form.md-outline input:focus, .datePickerLabel, .question-card .custom-select, .question-card .question .form-check, .MuiInputLabel-animated-13, .question-card label {
+    color: #fff;
+}
+
+.question .md-form.md-outline label.active {
+    color: #fff;
+    background: inherit
+}
+
+.md-form.md-outline.form-lg label.active {
+    transform: translateY(-134%);
+    font-size: 16px;
+}
+
+.question-card, .question, .rs-input-group-lg.rs-input-group:not(.rs-input-group-inside)>.rs-input, .question-card .custom-select {
+    background-color: rgba(90, 89, 89, 0.2)
+}
+
+.question-card .custom-select option {
+    color: #000;
+    background-color: inherit
+}
+
+.question-card .custom-select {
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23fff' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right .75rem center/8px 10px;
+}
+
+.MuiFormControl-marginNormal-2 {
+    margin-top: 31px;
+}
+
+.chrome-picker {
+    margin: auto
+}

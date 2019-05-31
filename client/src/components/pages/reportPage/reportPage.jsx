@@ -3,35 +3,41 @@ import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import NavBar from "../../Nav/NavBar";
 import Backdrop from "../../Backdrop/Backdrop";
 import "./reportPage.css";
-//import axiosQ from "../../../axios/axios-question";
+import { isArray } from "util";
+import axiosQ from "../../../axios/axios-question";
 
 class ReportPage extends Component {
   state = {
     title: "",
     id: "",
-    questions: [{ type: "type", question: "question" }],
-    answers: [["1", "2", "3", "4"], ["1", "2", "3", "4"], ["1", "2", "3", "4"]]
+    questions: [{}],
+    answers: []
   };
   componentDidMount() {
-    console.log(this.props);
-    //     const headers = {
-    //       Authorization: JSON.parse(localStorage.getItem("token"))
-    //     };
-    //     axiosQ
-    //       .post("" + this.props.match.params.id, { headers: headers })
-    //       .then(res => {
-    //         if (res.data.danger) {
-    //           const messages = res.data.messages;
-    //           alert(messages);
-    //         }
+    const headers = {
+      Authorization: JSON.parse(localStorage.getItem("token"))
+    };
+    axiosQ
+      .post("/forms/u/" + this.props.match.params.id, {}, { headers: headers })
 
-    //         const questions = [...res.data.data.questions];
-    //         const answers = [...res.data.data.answers];
-    //         this.setState({ questions: questions, answers: answers });
-    //       })
-    //       .catch(error => {
-    //         console.log(error);
-    //       });
+      .then(res => {
+        if (!res.data.danger) {
+          this.setState({
+            title: res.data.data.title,
+            answers: res.data.data.answers,
+            id: res.data.data.id,
+            question: res.data.data.question
+          });
+        }
+        console.log(res);
+
+        const questions = [...res.data.data.questions];
+        const answers = [...res.data.data.answers];
+        this.setState({ questions: questions, answers: answers });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
   render() {
     return (
@@ -59,8 +65,10 @@ class ReportPage extends Component {
                   {this.state.answers.map((elm, index) => {
                     return (
                       <tr key={index} className="TrBody">
-                        {elm.a.map((e, i) => {
-                          return <td key={i}>{e}</td>;
+                        {elm.map((e, i) => {
+                          if (isArray(e)) {
+                            return <td key={i}>{e[0]}</td>;
+                          } else return <td key={i}>{e}</td>;
                         })}
                       </tr>
                     );

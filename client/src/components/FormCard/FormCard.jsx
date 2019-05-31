@@ -57,19 +57,19 @@ class FormCard extends Component {
   };
   reportHandeler = () => {
     this.setState({ redirect2: true });
-    //   const headers = {
-    //     Authorization: JSON.parse(localStorage.getItem("token"))
-    //   };
-    //   axiosQ
-    //     .post("forms/u/" + this.props.id, { headers: headers })
-    //     .then(res => {
-    //       if (res.data.danger) {
-    //         const messages = res.data.messages;
-    //         alert(messages);
-    //       }
-    //       this.setState({ redirect2: true });
-    //     })
-    //     .catch(error => console.log(error));
+    const headers = {
+      Authorization: JSON.parse(localStorage.getItem("token"))
+    };
+    axiosQ
+      .post("forms/u/" + this.props.id, {}, { headers: headers })
+      .then(res => {
+        if (res.data.danger) {
+          const messages = res.data.messages;
+          alert(messages);
+        }
+        this.setState({ redirect2: true });
+      })
+      .catch(error => console.log(error));
   };
   render() {
     return (
@@ -82,6 +82,7 @@ class FormCard extends Component {
           <MDBCard className="d-flex mb-5 form">
             <div
               className="formColor"
+              style={{ background: this.props.color }}
               // style={{
               //   backgroundColor: `rgba(${this.props.color.r}, ${
               //     this.props.color.g
@@ -108,7 +109,8 @@ class FormCard extends Component {
                   <MDBIcon icon="flask" />
                 </MDBBtn>
                 <CopyToClipboard
-                  text={"http://192.168.43.110:3000/SurveyLab/" + this.props.id}
+                  // http://192.168.43.110:3000/
+                  text={"http://localhost:3000/SurveyLab/" + this.props.id}
                 >
                   <MDBBtn
                     color="unique-color-dark"

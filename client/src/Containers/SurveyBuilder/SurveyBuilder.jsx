@@ -22,7 +22,7 @@ class SurveyBuilder extends Component {
   componentDidMount() {
     console.log(this.props);
     const headers = {
-      Authorization: JSON.parse(localStorage.getItem("token"))
+      Authorization: localStorage.getItem("token")
     };
     if (this.props.edit) {
       axiosQ
@@ -151,12 +151,14 @@ class SurveyBuilder extends Component {
                 ch.push(elm.label);
               }
             });
-            ans = [...ans, ...ch];
+            ans = [...ans, ch];
+          } else if (elm.type === "RadioButton") {
+            if (elm.choices[parseInt(elm.answer)]) {
+              ans.push(elm.choices[parseInt(elm.answer)].label);
+            }
+          } else {
+            ans.push(elm.answer);
           }
-          if (elm.type === "RadioButton") {
-            ans.push(elm.choices[elm.answer].label);
-          }
-          ans.push(elm.answer);
         });
         const a = { answers: ans };
         console.log(a);
@@ -266,17 +268,17 @@ class SurveyBuilder extends Component {
               />
             </div>
           </MDBFormInline>
-        </div>
-        <div className="surveyBuilderContant">
-          {questionContant}
-          <Edit
-            made={this.props.made}
-            editHandler={this.editQuestionHandler}
-            addEditHandler={this.addEditQuestionHandler}
-            add={this.addQuestionHandler}
-            remove={this.removeQuestionHandler}
-            themChangehandler={this.themChangehandler}
-          />
+          <div className="surveyBuilderContant">
+            {questionContant}
+            <Edit
+              made={this.props.made}
+              editHandler={this.editQuestionHandler}
+              addEditHandler={this.addEditQuestionHandler}
+              add={this.addQuestionHandler}
+              remove={this.removeQuestionHandler}
+              themChangehandler={this.themChangehandler}
+            />
+          </div>
         </div>
       </React.Fragment>
     );

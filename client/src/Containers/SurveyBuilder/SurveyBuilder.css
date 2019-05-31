@@ -1,22 +1,20 @@
 .surveyBuilderColor {
-    position: absolute;
+    /* position: absolute;
     top: 0;
     left: 0;
-    height: 185px;
+    bottom: 0;
+    right: 0;
+    height: 100%;
     width: 100%;
     margin-bottom: 6px;
+    overflow-y: hidden; */
+    height: 100%;
+    width: 100%;
+    min-height: calc(100vh);
 }
 
 .surveyBuilderContant {
-    margin-top: 111px;
-    /* background: #fff;
-    position: relative;
-    margin: 20px auto;
-    margin-top: 146px;
-    border-radius: 28px;
-    padding: 1px;
-    padding-bottom: 15px;
-    width: 96%;
-    min-height: 401px;
-    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15); */
+    /* margin-top: 111px; */
+    margin-top: -35px;
+    margin-bottom: 25px;
 }
