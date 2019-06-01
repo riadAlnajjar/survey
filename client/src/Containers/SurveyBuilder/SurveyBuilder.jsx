@@ -15,12 +15,11 @@ class SurveyBuilder extends Component {
     },
     questions: [],
     validat: false,
-    editindex: 0,
     redirect: false,
     fillDone: false
   };
   componentDidMount() {
-    console.log(this.props);
+    console.log("builder state ", this.state);
     const headers = {
       Authorization: localStorage.getItem("token")
     };
@@ -167,6 +166,7 @@ class SurveyBuilder extends Component {
           .then(res => {
             if (!res.data.danger) {
               this.setState({ fillDone: true });
+              return true;
             }
             console.log(res);
           })
@@ -188,28 +188,22 @@ class SurveyBuilder extends Component {
     questions = questions.concat(question);
     this.setState({ questions });
   };
-  setEditindex = index => {
-    this.setState({ editindex: index });
-  };
-  editQuestionHandler = () => {
-    const questions = [...this.state.questions];
-    const question = questions[this.state.editindex];
-    return question;
-  };
-  addEditQuestionHandler = question => {
+
+  addEditQuestionHandler = (question, index) => {
     let questions = [...this.state.questions];
-    questions[this.state.editindex] = question;
+    questions[index] = question;
     this.setState({ questions });
   };
-  removeQuestionHandler = () => {
+  removeQuestionHandler = index => {
     let questions = [...this.state.questions];
-    if (questions[this.state.editindex]) {
-      questions.splice(this.state.editindex, 1);
+    if (questions[index]) {
+      questions.splice(index, 1);
       this.setState({ questions });
     }
   };
 
   render() {
+    console.log(this.state);
     let questionContant = (
       <QuestionsContainer
         textOnChangeHandler={this.textOnChangeHandler}
@@ -218,7 +212,9 @@ class SurveyBuilder extends Component {
         submit={this.submitHandler}
         fillDone={this.state.fillDone}
         validat={this.state.validat}
-        setEditindex={this.setEditindex}
+        addEditHandler={this.addEditQuestionHandler}
+        made={this.props.made}
+        remove={this.removeQuestionHandler}
       />
     );
     const bgStyle = {
@@ -272,10 +268,7 @@ class SurveyBuilder extends Component {
             {questionContant}
             <Edit
               made={this.props.made}
-              editHandler={this.editQuestionHandler}
-              addEditHandler={this.addEditQuestionHandler}
               add={this.addQuestionHandler}
-              remove={this.removeQuestionHandler}
               themChangehandler={this.themChangehandler}
             />
           </div>

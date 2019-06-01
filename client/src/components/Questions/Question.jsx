@@ -5,7 +5,9 @@ import {
   MDBCardBody,
   MDBFormInline,
   MDBRow,
-  MDBContainer
+  MDBContainer,
+  MDBBtn,
+  MDBIcon
 } from "mdbreact";
 import { InputNumber } from "rsuite";
 import StarRatings from "react-star-ratings";
@@ -19,11 +21,13 @@ import {
 
 import DateFnsUtils from "@date-io/date-fns";
 import "./Question.css";
+import QuestionModal from "../QuestionModal/QuestionMoadal";
 
 class Question extends Component {
   state = {
     startDate: new Date("2019-06-18T21:11:54"),
-    answer: 0
+    answer: 0,
+    editmode: false
   };
   dateHandleChange = date => {
     this.setState({
@@ -31,9 +35,32 @@ class Question extends Component {
     });
     this.props.textOnChangeHandler(date, this.props.index);
   };
+  toggle = () => {
+    const editmode = !this.state.editmode;
+    this.setState({ editmode: editmode });
+  };
 
   render() {
-    console.log(this.props);
+    let edit;
+    edit = !this.props.made ? (
+      <div className="edit">
+        <MDBBtn
+          className="editBut"
+          onClick={e => {
+            this.toggle();
+          }}
+        >
+          <MDBIcon icon="edit" size="s" />
+        </MDBBtn>
+        <MDBBtn
+          className="editBut"
+          onClick={() => this.props.remove(this.props.index)}
+        >
+          <MDBIcon icon="trash" size="s" />
+        </MDBBtn>
+      </div>
+    ) : null;
+
     let question = null;
     switch (this.props.questions.type) {
       case "PlainText":
@@ -289,23 +316,33 @@ class Question extends Component {
           </div>
         );
         break;
-
       default:
         question = null;
     }
+
     return (
-      <MDBCard
-        onClick={e => {
-          this.props.setEditindex(this.props.index);
-        }}
-        className={
-          this.props.questions.validation.valid
-            ? "question-card"
-            : "required question-card"
-        }
-      >
-        <MDBCardBody className="question">{question}</MDBCardBody>
-      </MDBCard>
+      <React.Fragment>
+        <MDBCard
+          className={
+            this.props.questions.validation.valid
+              ? "question-card"
+              : "required question-card"
+          }
+        >
+          <MDBCardBody className="question">
+            {edit}
+            {question}
+          </MDBCardBody>
+        </MDBCard>
+        <QuestionModal
+          editmode
+          question={this.props.questions}
+          isOpen={this.state.editmode}
+          toggle={this.toggle}
+          addEditHandler={this.props.addEditHandler}
+          index={this.props.index}
+        />
+      </React.Fragment>
     );
   }
 }

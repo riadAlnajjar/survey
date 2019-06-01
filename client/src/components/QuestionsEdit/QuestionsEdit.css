@@ -29,12 +29,14 @@
 
 .sticky-container .btn-floating i {
     font-size: 1.25rem;
-    line-height: 68px;
+    line-height: 50px;
 }
 
 .sticky-container .btn-floating.btn {
-    width: 70.1px;
-    height: 70.1px;
+    /* width: 70.1px;
+    height: 70.1px; */
+    width: 50.1px;
+    height: 50.1px;
 }
 
 .sticky-container .modal-body {

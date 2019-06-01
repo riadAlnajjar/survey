@@ -141,3 +141,30 @@
 .chrome-picker {
     margin: auto
 }
+
+.question-card .edit {
+    margin-top: -22px;
+    margin-right: -53px;
+    height: 90px;
+    opacity: 0;
+    float: right;
+    height: 100%;
+    margin-right: -53px;
+    background: #2d2b2b54;
+    display: flex;
+    flex-direction: column;
+}
+
+.question-card:hover .edit {
+    opacity: 1;
+}
+
+.question-card .editBut {
+    padding: 3px;
+    background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.question-card .editBut.btn-default:not([disabled]):not(.disabled):active, .question-card .editBut.btn-default:focus {
+    background-color: rgba(0, 0, 0, 0) !important;
+    color: #fff;
+}

@@ -23,6 +23,9 @@ class QuestionsContainer extends Component {
               questions={{ ...elm }}
               validat={this.props.validat}
               setEditindex={this.props.setEditindex}
+              addEditHandler={this.props.addEditHandler}
+              made={this.props.made}
+              remove={this.props.remove}
             />
           );
         })
@@ -38,8 +41,7 @@ class QuestionsContainer extends Component {
           <MDBBtn
             className="m-auto"
             onClick={e => {
-              this.props.submit(e);
-              this.setState({ loading: true });
+              this.setState({ loading: !this.props.submit(e) });
             }}
             color="primary"
             type="submit"

@@ -15,8 +15,7 @@ import {
   MDBMask,
   MDBModal,
   MDBModalBody,
-  MDBModalHeader,
-  MDBModalFooter
+  MDBModalHeader
 } from "mdbreact";
 
 import axiosQ from "../../../axios/axios-question";
