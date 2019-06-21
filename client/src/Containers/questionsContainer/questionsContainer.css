@@ -10,6 +10,18 @@
     max-width: 80%;
 }
 
+.Tbtn {
+    background: rgba(43, 54, 76, 0.2) !important;
+    border: 2px solid rgba(61, 72, 90, 0.2);
+    transition: all 0.5s ease-in-out
+}
+
+.Tbtn:hover {
+    background: rgba(43, 54, 76, 0) !important;
+    border: 4px solid;
+    border-color: rgba(61, 72, 90, 0.2) !important;
+}
+
 @media (min-width: 8px) {
     .question-container {
         width: 80%
@@ -22,4 +34,9 @@
         margin-right: 0%;
         margin-left: 20%;
     }
+}
+
+.Tbtn:not([disabled]):not(.disabled):active {
+    background: rgba(43, 54, 76, 0.1) !important;
+    border: 2px solid rgba(61, 72, 90, 0.2) !important;
 }

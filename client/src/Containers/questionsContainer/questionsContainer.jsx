@@ -2,13 +2,19 @@ import React, { Component } from "react";
 import Question from "../../components/Questions/Question";
 import { MDBContainer, MDBCol, MDBRow, MDBBtn } from "mdbreact";
 import "./questionsContainer.css";
+import { setTimeout } from "timers";
 
 class QuestionsContainer extends Component {
   state = {
     loading: false
   };
-  componentDidMount() {
-    console.log("\n", this.props, "\n");
+
+  delye() {
+    setTimeout(() => {
+      this.state.loading
+        ? this.setState({ loading: false })
+        : console.log("done");
+    }, 1000);
   }
   render() {
     const questions = this.props.questions
@@ -31,26 +37,44 @@ class QuestionsContainer extends Component {
         })
       : null;
     let submit;
-    this.state.loading
-      ? (submit = (
-          <div className="spinner-border text-primary m-auto" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        ))
-      : (submit = (
-          <MDBBtn
-            className="m-auto"
-            onClick={e => {
-              this.setState({ loading: !this.props.submit(e) });
-            }}
-            color="primary"
-            type="submit"
-          >
-            Submit Form
-          </MDBBtn>
-        ));
-    if (this.props.fillDone) {
-      submit = <h6 className="m-auto">done</h6>;
+    if (this.props.made) {
+      this.props.fillDone
+        ? (submit = <h6 className="m-auto text-white">done</h6>)
+        : (submit = (
+            <MDBBtn
+              className="m-auto Tbtn"
+              onClick={e => {
+                this.setState({ loading: !this.props.submit(e) });
+              }}
+              color="primary"
+              type="submit"
+            >
+              Submit Form
+            </MDBBtn>
+          ));
+    } else {
+      this.state.loading
+        ? (submit = (
+            <React.Fragment>
+              {this.delye()}
+              <div className="spinner-border text-primary m-auto" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            </React.Fragment>
+          ))
+        : (submit = (
+            <MDBBtn
+              className="m-auto Tbtn"
+              onClick={e => {
+                this.props.submit(e);
+                this.setState({ loading: true });
+              }}
+              color="primary"
+              type="submit"
+            >
+              Submit Form
+            </MDBBtn>
+          ));
     }
     return (
       <div className="">

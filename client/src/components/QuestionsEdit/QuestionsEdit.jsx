@@ -8,10 +8,9 @@ class Edit extends Component {
   state = {
     modal: false,
     question: {
-      type: "PlainText",
+      type: this.props.quize ? "CheckBox" : "PlainText",
       question: "",
       answer: "",
-      correct_answer: "",
       choices: [],
       mark: "",
       validation: {
@@ -34,7 +33,6 @@ class Edit extends Component {
   addHandler = q => {
     if (q.question.trim() !== "") {
       this.props.add(q);
-      console.log("question", q);
       this.toggle();
     } else {
       alert("question is empty");
@@ -54,8 +52,8 @@ class Edit extends Component {
                 });
               }}
               floating
-              color="peach-gradient"
-              className="btn-floating peach-gradient "
+              color="trans"
+              className="btn-floating trans "
             >
               <MDBIcon icon="fill-drip" size="2x" />
             </MDBBtn>
@@ -75,11 +73,11 @@ class Edit extends Component {
                     this.props.themChangehandler(e);
                   }}
                   colors={[
-                    "#63B5F7",
+                    "#502451",
+                    "#650e44",
                     "#1c2a48",
                     "#212121",
                     "#6d4c41",
-                    "#1b5e20",
                     "#006064",
                     "#00796b",
                     "#1C2331"
@@ -92,8 +90,8 @@ class Edit extends Component {
             <MDBBtn
               onClick={this.toggle}
               floating
-              color="primary"
-              className="btn-floating "
+              color="trans"
+              className="btn-floating trans"
             >
               <MDBIcon icon="plus" size="3x" />
             </MDBBtn>
@@ -104,8 +102,8 @@ class Edit extends Component {
                 window.print();
               }}
               floating
-              color="primary"
-              className="btn-floating "
+              color="trans"
+              className="btn-floating trans"
             >
               <MDBIcon icon="print" size="2x" />
             </MDBBtn>
@@ -124,6 +122,7 @@ class Edit extends Component {
             isOpen={this.state.modal}
             toggle={this.toggle}
             addHandler={this.addHandler}
+            quize={this.props.quize}
           />
         </div>
       </div>

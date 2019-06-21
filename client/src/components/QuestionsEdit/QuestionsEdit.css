@@ -2,8 +2,8 @@
     position: fixed;
     top: 22%;
     margin: 7px;
-    background-color: #e0dbdb96;
-    box-shadow: -0.5px 1px 1px 1px #b9abab;
+    /* background-color: #e0dbdb96;
+    box-shadow: -0.5px 1px 1px 1px #b9abab; */
     padding: 10px;
 }
 
@@ -21,8 +21,9 @@
     -o-transition: all .2s ease-in-out;
     /* transition: all .2s ease-in-out; */
     margin: 10px;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
+    /* -webkit-border-radius: 50%;
+    border-radius: 50%; */
+    border-radius: 3px;
     padding: 0;
     cursor: pointer;
 }
@@ -134,4 +135,15 @@
 
 .required {
     border: 3px solid #e60808;
+}
+
+.trans {
+    background: #29282859;
+    transition: all 0.5s ease;
+}
+
+.trans:hover {
+    background: #29282807;
+    transform: scale(1.05);
+    border: 2px solid #29282859;
 }

@@ -28,13 +28,28 @@ class ProfilePage extends Component {
   state = {
     forms: [],
     redirect: false,
+    quizeRedirect: false,
     image: null,
-    modal: false
+    modal1: false,
+    modal2: false
   };
   componentDidMount() {
     const headers = {
       Authorization: JSON.parse(localStorage.getItem("token"))
     };
+    axiosQ
+      .get("/users/info/", { headers: headers })
+      .then(res => {
+        if (res.data.danger) {
+          const messages = res.data.messages;
+          alert(messages);
+        } else {
+          this.setState({ image: res.data.data.image });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
     axiosQ
       .get("/forms/u/", { headers: headers })
       .then(res => {
@@ -42,54 +57,61 @@ class ProfilePage extends Component {
           const messages = res.data.messages;
           alert(messages);
         }
-        console.log(res);
         const forms = [...res.data.data];
         this.setState({ forms: forms });
       })
       .catch(error => {
         console.log(error);
       });
-
-    axiosQ
-      .get("users/pic", { headers: headers })
-      .then(res => {
-        if (res.data.danger) {
-          const messages = res.data.messages;
-          alert(messages);
-        } else {
-          this.setState({ image: res.data.data });
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
   }
-  toggle = () => {
-    this.setState({ modal: !this.state.modal });
+  toggle = nr => {
+    let modalNumber = "modal" + nr;
+    this.setState({
+      [modalNumber]: !this.state[modalNumber]
+    });
   };
-  imageHandleChange = e => {
-    var input = e.target;
-    var reader = new FileReader();
-    let dataURL;
-    reader.onload = () => {
-      dataURL = reader.result;
-      this.setState({ image: dataURL });
+  imageHandleChange = (e, Type) => {
+    if (Type === 1) {
       const headers = {
         Authorization: JSON.parse(localStorage.getItem("token"))
       };
       axiosQ
-        .post("users/edit", { image: this.state.image }, { headers: headers })
+        .post("users/edit", { image: "" }, { headers: headers })
         .then(res => {
           if (res.data.danger) {
             const messages = res.data.messages;
             alert(messages);
+          } else {
+            this.setState({ image: "" });
           }
         })
         .catch(error => {
           console.log(error);
         });
-    };
-    reader.readAsDataURL(input.files[0]);
+    } else {
+      var input = e.target;
+      var reader = new FileReader();
+      let dataURL;
+      reader.onload = () => {
+        dataURL = reader.result;
+        this.setState({ image: dataURL });
+        const headers = {
+          Authorization: JSON.parse(localStorage.getItem("token"))
+        };
+        axiosQ
+          .post("users/edit", { image: this.state.image }, { headers: headers })
+          .then(res => {
+            if (res.data.danger) {
+              const messages = res.data.messages;
+              alert(messages);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
   };
   remove = index => {
     let forms = [...this.state.forms];
@@ -108,19 +130,35 @@ class ProfilePage extends Component {
             index={i}
             id={elm.id}
             title={elm.title}
-            color={elm.them}
+            color={elm.theme}
             remove={this.remove}
           />
         );
       });
     }
     let redirect = null;
-    if (this.state.redirect) {
-      redirect = <Redirect to="/SurveyLab" />;
+    if (this.state.quizeRedirect === true) {
+      redirect = (
+        <Redirect
+          to={{
+            pathname: "/SurveyLab",
+            state: { quize: true }
+          }}
+        />
+      );
+    } else if (this.state.redirect === true) {
+      redirect = (
+        <Redirect
+          to={{
+            pathname: "/SurveyLab",
+            state: { quize: false }
+          }}
+        />
+      );
     }
     return (
       <React.Fragment>
-        <div className="formG">
+        <div className="Pbg">
           {redirect}
           <div className="profilePage ">
             <NavBar
@@ -131,7 +169,6 @@ class ProfilePage extends Component {
             <MDBRow className="justify-content-center">
               <MDBCol sm="12" md="6" lg="4" className="mb-5 userCard">
                 <MDBCard className="card-cascade " style={{ margin: "-10px" }}>
-                  {/* {console.log(this.state.image)} */}
                   {this.state.image && this.state.image !== "" ? (
                     <MDBView className="view-cascade">
                       <MDBCardImage
@@ -142,7 +179,10 @@ class ProfilePage extends Component {
                     </MDBView>
                   ) : (
                     <div className="inputImageDiv">
-                      <input type="file" onChange={this.imageHandleChange} />
+                      <input
+                        type="file"
+                        onChange={e => this.imageHandleChange(e, 2)}
+                      />
                       <div>
                         <button className="cameraBtn">
                           <Icon icon="camera-retro" size="lg" />
@@ -160,7 +200,10 @@ class ProfilePage extends Component {
                     >
                       {JSON.parse(localStorage.getItem("authData")).email}
                     </MDBCardTitle>
-                    <MDBBtn onClick={this.toggle} className="setting-btn ">
+                    <MDBBtn
+                      onClick={() => this.toggle(1)}
+                      className="setting-btn "
+                    >
                       <MDBIcon icon="cog" />
                     </MDBBtn>
                   </MDBCardBody>
@@ -173,7 +216,7 @@ class ProfilePage extends Component {
                     <MDBCol lg="6" xl="5" className="mb-3">
                       <MDBBtn
                         onClick={e => {
-                          this.setState({ redirect: true });
+                          this.setState({ modal2: true });
                         }}
                         floating
                         color="primary"
@@ -191,15 +234,56 @@ class ProfilePage extends Component {
           <MDBModal
             fullHeight
             position="left"
-            isOpen={this.state.modal}
-            toggle={this.toggle}
+            isOpen={this.state.modal1}
+            toggle={() => this.toggle(1)}
           >
             <MDBModalHeader className="text-center">settings</MDBModalHeader>
             <MDBModalBody className="text-center">
               <h1> change your profile picture </h1>
               <div className="imageChangeDiv">
-                <input type="file" onChange={this.imageHandleChange} />
+                <input
+                  type="file"
+                  onChange={e => this.imageHandleChange(e, 2)}
+                />
+                <MDBBtn
+                  outline
+                  color="secondary"
+                  style={{ position: "inherit" }}
+                >
+                  select image
+                </MDBBtn>
               </div>
+              <MDBBtn
+                outline
+                color="danger"
+                onClick={e => this.imageHandleChange(e, 1)}
+              >
+                remove
+              </MDBBtn>
+            </MDBModalBody>
+          </MDBModal>
+          <MDBModal
+            centered
+            isOpen={this.state.modal2}
+            toggle={() => this.toggle(2)}
+          >
+            <MDBModalHeader className="text-center">form type</MDBModalHeader>
+            <MDBModalBody className="text-center form-type">
+              <MDBBtn
+                color="unique-color-purple"
+                className="btn-outline-unique-purple "
+                onClick={() => this.setState({ redirect: true })}
+              >
+                normal form
+              </MDBBtn>
+              <MDBBtn
+                outline
+                color="unique-color-blue"
+                className="btn-outline-unique-blue"
+                onClick={() => this.setState({ quizeRedirect: true })}
+              >
+                quize form
+              </MDBBtn>
             </MDBModalBody>
           </MDBModal>
           <Backdrop show />

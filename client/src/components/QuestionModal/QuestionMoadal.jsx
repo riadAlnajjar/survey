@@ -14,10 +14,10 @@ import {
 class QuestionModal extends Component {
   state = {
     question: {
-      type: "PlainText",
+      type: this.props.quize ? "CheckBox" : "PlainText",
       question: "",
       answer: "",
-      correct_answer: "",
+      // correct_answer: "",
       choices: [],
       mark: "",
       validation: {
@@ -31,14 +31,20 @@ class QuestionModal extends Component {
     choice: ""
   };
   componentDidMount() {
-    this.setState({ question: this.props.question });
+    let q;
+    q = { ...this.props.question };
+    if (this.props.quize) {
+      q.type = this.props.quize ? "CheckBox" : "PlainText";
+    }
+
+    this.setState({ question: q });
   }
   clearState = () => {
     const question = {
-      type: "PlainText",
+      type: this.props.quize ? "CheckBox" : "PlainText",
       question: "",
       answer: "",
-      correct_answer: "",
+      // correct_answer: "",
       choices: [],
       mark: "",
       validation: {
@@ -59,15 +65,13 @@ class QuestionModal extends Component {
         this.state.question.type === "Spinner" ||
         this.state.question.type === "RadioButton"
       ) {
-        const choices = { label: choice };
+        const choices = { label: choice, checked: false };
         question.choices.push(choices);
         this.setState({ question });
-        console.log(this.state);
       } else if (this.state.question.type === "CheckBox") {
-        const newchoices = { label: choice, checked: false };
+        const newchoices = { label: choice, selected: false, checked: false };
         question.choices.push(newchoices);
         this.setState({ question });
-        console.log(this.state);
       }
     }
   };
@@ -94,7 +98,14 @@ class QuestionModal extends Component {
           return (
             <MDBRow key={index}>
               <MDBCol>
-                <MDBInput label={choice.label} disabled />
+                <MDBInput
+                  label={choice.label}
+                  disabled
+                  //  value={choice.label}
+                  //   onChange={e => {
+                  //     choice.label = e.currentTarget.value;
+                  //   }}
+                />
               </MDBCol>
               <MDBCol>
                 <MDBBtn
@@ -139,6 +150,21 @@ class QuestionModal extends Component {
         </div>
       );
     }
+    let options = null;
+    if (!this.props.quize) {
+      options = (
+        <React.Fragment>
+          <option value="PlainText">text</option>
+          <option value="Number">Number</option>
+          <option value="DateTimePicker">Date & Time Picker</option>
+          <option value="Date">Date Picker</option>
+          <option value="Time">Time Picker</option>
+          <option value="Seekbar">Slider</option>
+          <option value="StarRating">Star Rating</option>
+          <option value="Color">Color Picker </option>
+        </React.Fragment>
+      );
+    }
     return (
       <MDBModal isOpen={this.props.isOpen} toggle={this.props.toggle} centered>
         <MDBModalHeader toggle={this.props.toggle}>
@@ -162,17 +188,10 @@ class QuestionModal extends Component {
               <option disabled value="question Type">
                 question Type
               </option>
-              <option value="PlainText">text</option>
-              <option value="Number">Number</option>
-              <option value="Spinner">select</option>
               <option value="CheckBox">CheckBox</option>
+              <option value="Spinner">select</option>
               <option value="RadioButton">Radio</option>
-              <option value="DateTimePicker">Date & Time Picker</option>
-              <option value="Date">Date Picker</option>
-              <option value="Time">Time Picker</option>
-              <option value="Seekbar">Slider</option>
-              <option value="StarRating">Star Rating</option>
-              <option value="Color">Color Picker </option>
+              {options}
             </select>
           </div>
           {selectChoices}
@@ -243,6 +262,17 @@ class QuestionModal extends Component {
                 this.setState({ question: question });
               }}
             />
+
+            {this.props.quize ? (
+              <MDBInput
+                label="mark"
+                onChange={e => {
+                  const question = { ...this.state.question };
+                  question.mark = e.currentTarget.value;
+                  this.setState({ question: question });
+                }}
+              />
+            ) : null}
           </MDBFormInline>
         </MDBModalBody>
         <MDBModalFooter>
@@ -257,7 +287,6 @@ class QuestionModal extends Component {
           <MDBBtn
             color="primary"
             onClick={() => {
-              console.log("state :", this.state);
               if (
                 parseInt(this.state.question.validation.maxlength) <
                 parseInt(this.state.question.validation.minlength)

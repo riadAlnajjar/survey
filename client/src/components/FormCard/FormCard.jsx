@@ -21,6 +21,7 @@ class FormCard extends Component {
     path1: "/Survey/edit/" + this.props.id,
     path2: "/report/" + this.props.id // /report/F21MGr47TMi210TM0330a1103y990021GG0
   };
+
   deletHandler = () => {
     const headers = {
       Authorization: JSON.parse(localStorage.getItem("token"))
@@ -56,7 +57,6 @@ class FormCard extends Component {
       .catch(error => console.log(error));
   };
   reportHandeler = () => {
-    this.setState({ redirect2: true });
     const headers = {
       Authorization: JSON.parse(localStorage.getItem("token"))
     };
@@ -82,12 +82,13 @@ class FormCard extends Component {
           <MDBCard className="d-flex mb-5 form">
             <div
               className="formColor"
-              style={{ background: this.props.color }}
               // style={{
               //   backgroundColor: `rgba(${this.props.color.r}, ${
               //     this.props.color.g
               //   }, ${this.props.color.b}, ${this.props.color.a})`
               // }}
+
+              style={{ backgroundColor: this.props.color }}
             />
 
             <MDBCardBody>

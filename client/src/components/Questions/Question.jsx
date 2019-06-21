@@ -146,7 +146,7 @@ class Question extends Component {
                     type="checkbox"
                     id={"checkbox" + index}
                     key={index}
-                    checked={this.props.questions.choices[index].checked}
+                    checked={this.props.questions.choices[index].selected}
                     onChange={e => {
                       this.props.checkOnChangeHandler(this.props.index, index);
                     }}
@@ -265,7 +265,6 @@ class Question extends Component {
                   label="Date & Time"
                   value={this.state.startDate}
                   onChange={e => {
-                    console.log("date", this.state.startDate);
                     this.dateHandleChange();
                   }}
                 />
@@ -286,7 +285,6 @@ class Question extends Component {
                   label="Time"
                   value={this.state.startDate}
                   onChange={e => {
-                    console.log("date", this.state.startDate);
                     this.dateHandleChange();
                   }}
                 />
@@ -307,7 +305,6 @@ class Question extends Component {
                   label="Date"
                   value={this.state.startDate}
                   onChange={e => {
-                    console.log("date", this.state.startDate);
                     this.dateHandleChange();
                   }}
                 />
